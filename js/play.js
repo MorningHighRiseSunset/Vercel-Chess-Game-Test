@@ -1,482 +1,189 @@
-$(function() {
-    var engine = new Worker("js/lozza.js");
-    console.log("GUI: uci");
-    engine.postMessage("uci");
-    console.log("GUI: ucinewgame");
-    engine.postMessage("ucinewgame");
+/* New align */
+#container {
+    overflow: hidden;
+    width: 100%;
+    position: relative;
+    text-align: center;
+}
+#board {
+    position: relative;
+    margin: 0 auto;
+    display: inline-block;
+}
+#side {
+    font-family: helvetica, sans-serif;
+    padding: 10px;
+    width: 515px;
+    position: relative;
+    margin: 0 auto;
+    display: inline-block;
+    vertical-align: top;
+}
+.buttonpanel {
+    position: relative;
+    text-align: left;
+    margin: 5px;
+}
+#status {
+    margin: 5px;
+    font-weight: bolder;
+    text-align: left;
+    color: black;
+    font-size: 15px;
+    position: left;
+}
+#fenBox {
+    margin: 5px;
+    clear: left;
+    color:white;
+    background: black;
+    position: relative;
+    text-align: left;
+    border: 1px solid red;
+}
 
-    var moveList = [], scoreList =[];
-    var cursor = 0;
+#fen {
+    font-weight: lighter;
+    font-size: 10px;
+    overflow-x: visible;
+}
+#optionsBox {
+    text-align: center;
+}
+#pgnBox {
+    background: black;
+    color: white;
+    height: 330px;
+    width: 130px;
+    padding: 3px;
+    margin: 3px;
+    float: right; /* Align to the right */
+    position: relative;
+    text-align: left;
+    border: 1px solid red;
+}
+#pgn {
+    text-align: left;
+    overflow: auto;
+    font-weight: lighter;
+    font-size: 14px;
+    height: 260px;
+    float: right; /* Align to the right */
+    margin-right: 10px; /* Add margin to the right */
+}
+.littleButton {
+    -moz-box-shadow: 0px 1px 0px 0px #fff6af;
+    -webkit-box-shadow: 0px 1px 0px 0px #fff6af;
+    box-shadow: 0px 1px 0px 0px #fff6af;
+    background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #ffec64), color-stop(1, #ffab23));
+    background:-moz-linear-gradient(top, #ffec64 5%, #ffab23 100%);
+    background:-webkit-linear-gradient(top, #ffec64 5%, #ffab23 100%);
+    background:-o-linear-gradient(top, #ffec64 5%, #ffab23 100%);
+    background:-ms-linear-gradient(top, #ffec64 5%, #ffab23 100%);
+    background:linear-gradient(to bottom, #ffec64 5%, #ffab23 100%);
+    filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffec64', endColorstr='#ffab23',GradientType=0);
+    background-color:#ffec64;
+    font-size: 50%;
+    margin: 5px;
+}
 
-    var player = 'w';
-    var entirePGN = ''; // longer than current PGN when rewind buttons are clicked
+.littleButton:hover {
+    background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #ffab23), color-stop(1, #ffec64));
+    background:-moz-linear-gradient(top, #ffab23 5%, #ffec64 100%);
+    background:-webkit-linear-gradient(top, #ffab23 5%, #ffec64 100%);
+    background:-o-linear-gradient(top, #ffab23 5%, #ffec64 100%);
+    background:-ms-linear-gradient(top, #ffab23 5%, #ffec64 100%);
+    background:linear-gradient(to bottom, #ffab23 5%, #ffec64 100%);
+    filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffab23', endColorstr='#ffec64',GradientType=0);
+    background-color:#ffab23;
+}
 
-    var board;
-    var game = new Chess(), // move validation, etc.    
-        statusEl = $('#status'),
-        fenEl = $('#fen'),
-        pgnEl = $('#pgn');
+#pgnBox span {
+    color: gray;
+}
+#gaugebox {
+    position: relative;
+    float: left;
+}
+#optionsBox {
+    text-align: left;
+}
 
-    var engineRunning = false;
-    var board3D = ChessBoard3.webGLEnabled();
+.yellowButton {
+    -moz-box-shadow: 0px 1px 0px 0px #fff6af;
+    -webkit-box-shadow: 0px 1px 0px 0px #fff6af;
+    box-shadow: 0px 1px 0px 0px #fff6af;
+    background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #ffec64), color-stop(1, #ffab23));
+    background:-moz-linear-gradient(top, #ffec64 5%, #ffab23 100%);
+    background:-webkit-linear-gradient(top, #ffec64 5%, #ffab23 100%);
+    background:-o-linear-gradient(top, #ffec64 5%, #ffab23 100%);
+    background:-ms-linear-gradient(top, #ffec64 5%, #ffab23 100%);
+    background:linear-gradient(to bottom, #ffec64 5%, #ffab23 100%);
+    filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffec64', endColorstr='#ffab23',GradientType=0);
+    background-color:#ffec64;
+    -moz-border-radius:6px;
+    -webkit-border-radius:6px;
+    border-radius:6px;
+    border:1px solid #ffaa22;
+    display:inline-block;
+    cursor:pointer;
+    color:#333333;
+    font-family: Arial, sans-serif;
+    font-size:15px;
+    font-weight:bold;
+    padding:6px 12px;
+    text-decoration:none;
+    text-shadow:0px 1px 0px #ffee66;
+    width:80px;
+}
 
-    if (!board3D) {
-        swal("WebGL unsupported or disabled.", "Using a 2D board...");
-        $('#dimensionBtn').remove();
-    }
+.yellowButton:hover {
+    background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #ffab23), color-stop(1, #ffec64));
+    background:-moz-linear-gradient(top, #ffab23 5%, #ffec64 100%);
+    background:-webkit-linear-gradient(top, #ffab23 5%, #ffec64 100%);
+    background:-o-linear-gradient(top, #ffab23 5%, #ffec64 100%);
+    background:-ms-linear-gradient(top, #ffab23 5%, #ffec64 100%);
+    background:linear-gradient(to bottom, #ffab23 5%, #ffec64 100%);
+    filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffab23', endColorstr='#ffec64',GradientType=0);
+    background-color:#ffab23;
+}
 
-    var scoreGauge = $('#gauge').SonicGauge({
-        label:'WHITE\'S ADVANTAGE\n(centipawns)',
-        start: {angle: -230, num: -2000},
-        end: {angle: 50, num: 2000},
-        markers: [
-            {
-                gap: 200,
-                line: {"width" : 12, "stroke" : "none", "fill" : "#cccccc"},
-                text: {"space": -22, "text-anchor" : "middle", "fill" : "#cccccc", "font-size" : 10}
-            },
-            {gap: 100, line: {"width" : 10, "stroke" : "none", "fill" : "#999999"}},
-            {gap: 50, line: {"width" : 8, "stroke" : "none", "fill" : "#888888"}}
-        ],
-        animation_speed : 200,
-        diameter : 300,
-        style: {
-            label: {
-                "font-size": 12,
-                fill: '#cccccc'
-            },
-            center: {
-                fill: 'r#f46a3a-#890b0b'
-            },
-            outline: {
-                fill: 'r#888888-#000000',
-                stroke: 'black',
-                'stroke-width' : 1
-            }
-        }
-    });
+.yellowButton:active {
+    position:relative;
+    top:1px;
+}
 
-    function updateScoreGauge(score) {
-        scoreGauge.SonicGauge('val', parseInt(score, 10));
-    }
+.pgn-box {
+    border: 2px solid #ffaa22; /* Border color */
+    padding: 10px; /* Padding inside the box */
+    background-color: rgba(0, 0, 0, 0.8); /* Semi-transparent background */
+    color: white; /* Text color */
+    border-radius: 5px; /* Rounded corners */
+    margin-top: 10px; /* Space above the box */
+    position: relative; /* Positioning context for the button */
+    height: 150px; /* Set a height to ensure the button fits well */
+    display: flex; /* Use flexbox for alignment */
+    flex-direction: column; /* Stack items vertically */
+    justify-content: center; /* Center items vertically */
+    align-items: center; /* Center items horizontally */
+}
 
-    function adjustBoardWidth() {
-        var fudge = 5;
-        var windowWidth = $(window).width();
-        var windowHeight = $(window).height();
-        var desiredBoardWidth = windowWidth - $('#side').outerWidth(true) - fudge;
-        var desiredBoardHeight = windowHeight - $('#header').outerHeight(true) - $('#banner').outerHeight(true) - $('#footer').outerHeight(true) - fudge;
+.pgn-box #pgn-content {
+    margin-bottom: 40px; /* Space for the button */
+}
 
-        var boardDiv = $('#board');
-        if (board3D) {
-            desiredBoardWidth &= 0xFFFC; // mod 4 = 0
-            desiredBoardHeight -= (desiredBoardHeight % 3); // mod 3 = 0
-            if (desiredBoardWidth * 0.75 > desiredBoardHeight) {
-                desiredBoardWidth = desiredBoardHeight * 4 / 3;
-            }
-            boardDiv.css('width', desiredBoardWidth);
-            boardDiv.css('height', (desiredBoardWidth * 0.75));
-        } else {
-            desiredBoardWidth = Math.min(desiredBoardWidth, desiredBoardHeight);
-            boardDiv.css('width', desiredBoardWidth);
-            boardDiv.css('height', desiredBoardHeight);
-        }
-        if (board !== undefined) {
-            board.resize();
-        }
-    }
+.pgn-box button {
+    background-color: #ffaa22; /* Button background color */
+    color: black; /* Button text color */
+    border: none; /* No border */
+    border-radius: 5px; /* Rounded corners */
+    padding: 5px 10px; /* Padding for the button */
+    cursor: pointer; /* Pointer cursor on hover */
+    font-size: 14px; /* Font size */
+    position: relative; /* Positioning the button */
+    margin-top: 5px; /* Space between buttons */
+}
 
-    function fireEngine() {
-        engineRunning = true;
-        updateStatus();
-        var currentScore;
-        var msg = "position fen "+game.fen();
-        console.log("GUI: "+msg);
-        engine.postMessage(msg);
-        msg = 'go movetime ' + $('#moveTime').val();
-        console.log("GUI: "+msg);
-        engine.postMessage(msg);
-        engine.onmessage = function(event) {
-            var line = event.data;
-            console.log("ENGINE: "+line);
-            var best = parseBestMove(line);
-            if (best !== undefined) {
-                var move = game.move(best);
-                moveList.push(move);
-                if (currentScore !== undefined) {
-                    if (scoreList.length > 0) {
-                        scoreList.pop(); // remove the dummy score for the user's prior move
-                        scoreList.push(currentScore); // Replace it with the engine's opinion
-                    }
-                    scoreList.push(currentScore);// engine's response
-                } else {
-                    scoreList.push(0); // not expected
-                }
-                cursor++;
-                board.position(game.fen(), true);
-                engineRunning = false;
-                updateStatus();
-            } else {
-                var score = parseScore(line);
-                if (score !== undefined) {
-                    if (player === 'w') {
-                        score = -score; // convert from engine's score to white's score
-                    }
-                    updateScoreGauge(score);
-                    currentScore = score;
-                }
-            }
-        };
-    }
-
-    function parseBestMove(line) {
-        var match = line.match(/bestmove\s([a-h][1-8][a-h][1-8])(n|N|b|B|r|R|q|Q)?/);
-        if (match) {
-            var bestMove = match[1];
-            var promotion = match[2];
-            return {
-                from: bestMove.substring(0, 2),
-                to: bestMove.substring(2, 4),
-                promotion: promotion
-            }
-        }
-    }
-
-    function parseScore(line) {
-        var match = line.match(/score\scp\s(-?\d+)/);
-        if (match) {
-            return match[1];
-        } else {
-            if (line.match(/mate\s-?\d/)) {
-                return 2500;
-            }
-        }
-    }
-
-    function updateStatus() {
-        var status = '';
-        var moveColor = 'White';
-        if (game.turn() === 'b') {
-            moveColor = 'Black';
-        }
-
-        if (game.game_over()) {
-            if (game.in_checkmate()) {
-                status = moveColor + ' checkmated.';
-            } else if (game.in_stalemate()) {
-                status = moveColor + " stalemated";
-            } else if (game.insufficient_material()) {
-                status = "Draw (insufficient material)."
-            } else if (game.in_threefold_repetition()) {
-                status = "Draw (threefold repetition)."
-            } else if (game.in_draw()) {
-                status = "Game over (fifty move rule)."
-            }
-            swal({
-                title : "Game Over",
-                text : status,
-                type: 'info',
-                showCancelButton: false,
-                confirmButtonColor: "#DD6655",
-                onConfirmButtonText: 'OK',
-                closeOnConfirm: true
-            });
-            engineRunning = false;
-        }
-
-        fenEl.html(game.fen().replace(/ /g, '&nbsp;'));
-        var currentPGN = game.pgn({max_width:10,newline_char:"<br>"});
-        var matches = entirePGN.lastIndexOf(currentPGN, 0) === 0;
-        if (matches) {
-            currentPGN += "<span>" + entirePGN.substring(currentPGN.length, entirePGN.length) + "</span>";
-        } else {
-            entirePGN = currentPGN;
-        }
-        pgnEl.html(currentPGN);
-        if (engineRunning) {
-            status += '';
-        }
-        statusEl.html(status);
-    };
-
-    // Set up chessboard
-    var onDrop = function(source, target) {
-        if (board.hasOwnProperty('removeGreySquares') && typeof board.removeGreySquares === 'function') {
-            board.removeGreySquares();
-        }
-    
-        var move = game.move({
-            from: source,
-            to: target,
-            promotion: $("#promotion").val()
-        });
-    
-        if (move === null) return 'snapback';
-    
-        if (cursor === 0) {
-            console.log("GUI: ucinewgame");
-            engine.postMessage("ucinewgame");
-        }
-        moveList = moveList.slice(0, cursor);
-        scoreList = scoreList.slice(0, cursor);
-        moveList.push(move);
-        scoreList.push(scoreList.length === 0 ? 0 : scoreList[scoreList.length - 1]);
-        cursor = moveList.length;
-    
-        board.position(game.fen(), true);
-    };
-
-    var onSnapEnd = function() {
-        if (!game.game_over() && game.turn() !== player) {
-            fireEngine();
-        }
-    };
-
-    var onMouseoverSquare = function(square) {
-        var moves = game.moves({
-            square: square,
-            verbose: true
-        });
-
-        if (moves.length === 0) return;
-
-        if (board.hasOwnProperty('greySquare') && typeof board.greySquare === 'function') {
-            board.greySquare(square);
-            for (var i = 0; i < moves.length; i++) {
-                board.greySquare(moves[i].to);
-            }
-        }
-    };
-
-    var onMouseoutSquare = function(square, piece) {
-        if (board.hasOwnProperty('removeGreySquares') && typeof board.removeGreySquares === 'function') {
-            board.removeGreySquares();
-        }
-    };
-
-    function createBoard(pieceSet) {
-        var cfg = {
-            cameraControls: true,
-            draggable: true,
-            position: 'start',
-            onDrop: onDrop,
-            onMouseoutSquare: onMouseoutSquare,
-            onMouseoverSquare: onMouseoverSquare,
-            onSnapEnd: onSnapEnd
-        };
-        if (board3D) {
-            if (pieceSet) {
-                if (pieceSet === 'minions') {
-                    cfg.whitePieceColor = 0xFFFF00;
-                    cfg.blackPieceColor = 0xCC00CC;
-                    cfg.lightSquareColor = 0x888888;
-                    cfg.darkSquareColor = 0x666666;
-                }
-                cfg.pieceSet = 'assets/chesspieces/' + pieceSet + '/{piece}.json';
-            }
-            return new ChessBoard3('board', cfg);
-        } else {
-            return new ChessBoard('board', cfg);
-        }
-    }
-
-    adjustBoardWidth();
-    board = createBoard();
-
-    $(window).resize(function() {
-        adjustBoardWidth();
-    });
-
-    // Set up buttons
-    $('#startBtn').on('click', function() {
-        var cursorStart = 0;
-        if (player === 'b') {
-            cursorStart = 1;
-        }
-        while (cursor > cursorStart) {
-            game.undo();
-            cursor--;
-        }
-        updateScoreGauge(0);
-        board.position(game.fen());
-        updateStatus();
-    });
-    $('#endBtn').on('click', function() {
-        while (cursor < moveList.length) {
-            game.move(moveList[cursor++]);
-        }
-        board.position(game.fen());
-        updateScoreGauge(scoreList.length == 0 ? 0 : scoreList[cursor - 1]);
-        updateStatus();
-    });
-    
-    $('#flipBtn').on('click', function() {
-        if (game.game_over()) {
-            return;
-        }
-        board.flip();
-        player = (player === 'w') ? 'b' : 'w';
-        updateStatus();
-        setTimeout(fireEngine, 1000);
-    });
-
-    $('#dimensionBtn').on('click', function() {
-        var dimBtn = $("#dimensionBtn");
-        dimBtn.prop('disabled', true);
-        var position = board.position();
-        var orientation = board.orientation();
-        board.destroy();
-        board3D = !board3D;
-        adjustBoardWidth();
-        dimBtn.val(board3D? '2D' : '3D');
-        setTimeout(function () {
-            board = createBoard($('#piecesMenu').val());
-            board.orientation(orientation);
-            board.position(position);
-            $("#dimensionBtn").prop('disabled', false);
-        });
-    });
-
-    $("#setFEN").on('click', function(e) {
-        swal({
-            title: "SET FEN",
-            text: "Enter a FEN position below:",
-            type: "input",
-            inputType: "text",
-            showCancelButton: true,
-            closeOnConfirm: false
-        }, function(fen) {
-            if (fen === false) {
-                return; //cancel
-            }
-            fen = fen.trim();
-            console.log(fen);
-            var fenCheck = game.validate_fen(fen);
-            console.log("valid: "+fenCheck.valid);
-            if (fenCheck.valid) {
-                game = new Chess(fen);
-                console.log("GUI: ucinewgame");
-                engine.postMessage('ucinewgame');
-                console.log("GUI: position fen " + fen);
-                engine.postMessage('position fen '+ fen);
-                board.position(fen);
-                fenEl.val(fen);
-                pgnEl.empty();
-                updateStatus();
-                swal("Success", "FEN parsed successfully.", "success");
-            } else {
-                console.log(fenCheck.error);
-                swal.showInputError("ERROR: "+fenCheck.error);
-                return false;
-            }
-        });
-    });
-
-    $("#setPGN").on('click', (function(e) {
-        swal({
-            title: "SET PGN",
-            text: "Enter a game PGN below:",
-            type: "input",
-            inputType: "text",
-            showCancelButton: true,
-            closeOnConfirm: false
-        }, function(pgn) {
-            if (pgn === false) {
-                return; // cancel
-            }
-            pgn = pgn.trim();
-            console.log(pgn);
-            var pgnGame = new Chess();
-            if (pgnGame.load_pgn(pgn)) {
-                game = pgnGame;
-                var fen = game.fen();
-                console.log("GUI: ucinewgame");
-                engine.postMessage('ucinewgame');
-                console.log("GUI: position fen " + fen);
-                engine.postMessage('position fen ' + game.fen());
-                board.position(fen, false);
-                fenEl.val(game.fen());
-                pgnEl.empty();
-                moveList = game.history();
-                scoreList = [];
-                for (var i = 0; i < moveList.length; i++) {
-                    scoreList.push(0);
-                }
-                cursor = moveList.length;
-                updateStatus();
-                swal("Success", "PGN parsed successfully.", "success");
-            } else {
-                swal.showInputError("PGN not valid.");
-                return false;
-            }
-        });
-    }));
-
-    $("#resetBtn").on('click', function(e) {
-        player = 'w';
-        game = new Chess();
-        fenEl.empty();
-        pgnEl.empty();
-        largestPGN = '';
-        moveList = [];
-        scoreList = [];
-        cursor = 0;
-        board.start();
-        board.orientation('white');
-        console.log("GUI: ucinewgame");
-        engine.postMessage('ucinewgame');
-        updateScoreGauge(0);
-    });
-
-    $("#engineMenu").change(function() {
-       console.log($("#engineMenu").val());
-        if (engine) {
-            var jsURL = $("#engineMenu").val();
-            engine.terminate();
-            engine = new Worker(jsURL);
-            console.log("GUI: uci");
-            engine.postMessage('uci');
-            console.log("GUI: ucinewgame");
-            engine.postMessage('ucinewgame');
-            updateScoreGauge(0);
-            if (jsURL.match(/Player/)) {
-                swal('Using the tiny p4wn engine, which plays at an amateur level.');
-            } else if (jsURL.match(/lozza/)) {
-                swal('Using Lozza engine by Colin Jerkins, estimated rating 2340.')
-            } else if (jsURL.match(/stockfish/)) {
-                swal("Using stockfish engine, estimated rating > 3000.");
-            }
-        }
-    });
-
-    $('#piecesMenu').change(function() {
-        var fen = board.position();
-        board.destroy();
-        board = createBoard($('#piecesMenu').val());
-        board.position(fen);
-        adjustBoardWidth();
-    });
-
-    // New buttons for copying and printing moves
-    $('#copyMovesBtn').on('click', function() {
-        var movesText = moveList.map(move => move.san).join(', '); // Collect moves in SAN format
-        navigator.clipboard.writeText(movesText).then(function() {
-            swal("Success", "Moves copied to clipboard!", "success");
-        }, function(err) {
-            swal("Error", "Failed to copy moves: " + err, "error");
-        });
-    });
-
-    $('#printMovesBtn').on('click', function() {
-        var movesText = moveList.map(move => move.san).join(', '); // Collect moves in SAN format
-        var printWindow = window.open('', '', 'height=400,width=600');
-        printWindow.document.write('<html><head><title>Chess Moves</title></head><body>');
-        printWindow.document.write('<h1>Recorded Chess Moves</h1>');
-        printWindow.document.write('<pre>' + movesText + '</pre>');
-        printWindow.document.write('</body></html>');
-        printWindow.document.close();
-        printWindow.print();
-    });
-
-    updateStatus();
-});
+.pgn-box button:hover {
+    background-color: #ffec64; /* Change background on hover */
+}
