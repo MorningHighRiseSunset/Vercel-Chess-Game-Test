@@ -151,4 +151,35 @@
     top:1px;
 }
 
+.pgn-box {
+    border: 2px solid #ffaa22; /* Border color */
+    padding: 10px; /* Padding inside the box */
+    background-color: rgba(0, 0, 0, 0.8); /* Semi-transparent background */
+    color: white; /* Text color */
+    border-radius: 5px; /* Rounded corners */
+    margin-top: 10px; /* Space above the box */
+    position: relative; /* Positioning context for the button */
+    height: 150px; /* Set a height to ensure the button fits well */
+}
+
+.pgn-box #pgn-content {
+    margin-bottom: 40px; /* Space for the button */
+}
+
+.pgn-box button {
+    background-color: #ffaa22; /* Button background color */
+    color: black; /* Button text color */
+    border: none; /* No border */
+    border-radius: 5px; /* Rounded corners */
+    padding: 5px 10px; /* Padding for the button */
+    cursor: pointer; /* Pointer cursor on hover */
+    font-size: 14px; /* Font size */
+    position: absolute; /* Positioning the button */
+    bottom: 10px; /* Position from the bottom */
+    right: 10px; /* Position from the right */
+}
+
+.pgn-box button:hover {
+    background-color: #ffec64; /* Change background on hover */
+}
 
