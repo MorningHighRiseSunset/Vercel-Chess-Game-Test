@@ -57,7 +57,7 @@
     width: 130px;
     padding: 3px;
     margin: 3px;
-    float:right;
+    float: right; /* Align to the right */
     position: relative;
     text-align: left;
     border: 1px solid red;
@@ -68,6 +68,8 @@
     font-weight: lighter;
     font-size: 14px;
     height: 260px;
+    float: right; /* Align to the right */
+    margin-right: 10px; /* Add margin to the right */
 }
 .littleButton {
     -moz-box-shadow: 0px 1px 0px 0px #fff6af;
@@ -160,6 +162,10 @@
     margin-top: 10px; /* Space above the box */
     position: relative; /* Positioning context for the button */
     height: 150px; /* Set a height to ensure the button fits well */
+    display: flex; /* Use flexbox for alignment */
+    flex-direction: column; /* Stack items vertically */
+    justify-content: center; /* Center items vertically */
+    align-items: center; /* Center items horizontally */
 }
 
 .pgn-box #pgn-content {
@@ -174,12 +180,10 @@
     padding: 5px 10px; /* Padding for the button */
     cursor: pointer; /* Pointer cursor on hover */
     font-size: 14px; /* Font size */
-    position: absolute; /* Positioning the button */
-    bottom: 10px; /* Position from the bottom */
-    right: 10px; /* Position from the right */
+    position: relative; /* Positioning the button */
+    margin-top: 5px; /* Space between buttons */
 }
 
 .pgn-box button:hover {
     background-color: #ffec64; /* Change background on hover */
 }
-
