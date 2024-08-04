@@ -6,7 +6,6 @@ $(function() {
     engine.postMessage("ucinewgame");
 
     var moveList = [], scoreList =[];
-    //new line
     var cursor = 0;
 
     var player = 'w';
@@ -18,10 +17,7 @@ $(function() {
         fenEl = $('#fen'),
         pgnEl = $('#pgn');
 
-    // true for when the engine is processing; ignore_mouse_events is always true if this is set (also during animations)
     var engineRunning = false;
-
-    // don't let the user press buttons while other button clicks are still processing
     var board3D = ChessBoard3.webGLEnabled();
 
     if (!board3D) {
@@ -73,8 +69,6 @@ $(function() {
 
         var boardDiv = $('#board');
         if (board3D) {
-            // Using chessboard3.js.
-            // Adjust for 4:3 aspect ratio
             desiredBoardWidth &= 0xFFFC; // mod 4 = 0
             desiredBoardHeight -= (desiredBoardHeight % 3); // mod 3 = 0
             if (desiredBoardWidth * 0.75 > desiredBoardHeight) {
@@ -83,7 +77,6 @@ $(function() {
             boardDiv.css('width', desiredBoardWidth);
             boardDiv.css('height', (desiredBoardWidth * 0.75));
         } else {
-            // This is a chessboard.js board. Adjust for 1:1 aspect ratio
             desiredBoardWidth = Math.min(desiredBoardWidth, desiredBoardHeight);
             boardDiv.css('width', desiredBoardWidth);
             boardDiv.css('height', desiredBoardHeight);
@@ -124,7 +117,6 @@ $(function() {
                 engineRunning = false;
                 updateStatus();
             } else {
-                // Before the move gets here, the engine emits info responses with scores
                 var score = parseScore(line);
                 if (score !== undefined) {
                     if (player === 'w') {
@@ -162,16 +154,13 @@ $(function() {
     }
 
     function updateStatus() {
-
         var status = '';
-
         var moveColor = 'White';
         if (game.turn() === 'b') {
             moveColor = 'Black';
         }
 
         if (game.game_over()) {
-
             if (game.in_checkmate()) {
                 status = moveColor + ' checkmated.';
             } else if (game.in_stalemate()) {
@@ -195,8 +184,6 @@ $(function() {
             engineRunning = false;
         }
 
-
-
         fenEl.html(game.fen().replace(/ /g, '&nbsp;'));
         var currentPGN = game.pgn({max_width:10,newline_char:"<br>"});
         var matches = entirePGN.lastIndexOf(currentPGN, 0) === 0;
@@ -218,19 +205,14 @@ $(function() {
             board.removeGreySquares();
         }
     
-        // see if the move is legal
         var move = game.move({
             from: source,
             to: target,
             promotion: $("#promotion").val()
         });
     
-    
-        // illegal move
         if (move === null) return 'snapback';
     
-    
-        // update move list and score list
         if (cursor === 0) {
             console.log("GUI: ucinewgame");
             engine.postMessage("ucinewgame");
@@ -241,13 +223,9 @@ $(function() {
         scoreList.push(scoreList.length === 0 ? 0 : scoreList[scoreList.length - 1]);
         cursor = moveList.length;
     
-        // update the board position after the piece snap
-        // for castling, en passant, pawn promotion
         board.position(game.fen(), true);
     };
 
-    // update the board position after the piece snap
-    // for castling, en passant, pawn promotion
     var onSnapEnd = function() {
         if (!game.game_over() && game.turn() !== player) {
             fireEngine();
@@ -255,20 +233,15 @@ $(function() {
     };
 
     var onMouseoverSquare = function(square) {
-        // get list of possible moves for this square
         var moves = game.moves({
             square: square,
             verbose: true
         });
 
-        // exit if there are no moves available for this square
         if (moves.length === 0) return;
 
         if (board.hasOwnProperty('greySquare') && typeof board.greySquare === 'function') {
-            // highlight the square they moused over
             board.greySquare(square);
-
-            // highlight the possible squares for this piece
             for (var i = 0; i < moves.length; i++) {
                 board.greySquare(moves[i].to);
             }
@@ -341,12 +314,8 @@ $(function() {
         if (game.game_over()) {
             return;
         }
-        board.flip(); //wheeee!
-        if (player === 'w') {
-            player = 'b';
-        } else {
-            player = 'w';
-        }
+        board.flip();
+        player = (player === 'w') ? 'b' : 'w';
         updateStatus();
         setTimeout(fireEngine, 1000);
     });
@@ -469,7 +438,7 @@ $(function() {
             engine.postMessage('uci');
             console.log("GUI: ucinewgame");
             engine.postMessage('ucinewgame');
-            updateScoreGauge(0); // they each act a little differently ( Chess Bot )
+            updateScoreGauge(0);
             if (jsURL.match(/Player/)) {
                 swal('Using the tiny p4wn engine, which plays at an amateur level.');
             } else if (jsURL.match(/lozza/)) {
@@ -488,6 +457,26 @@ $(function() {
         adjustBoardWidth();
     });
 
+    // New buttons for copying and printing moves
+    $('#copyMovesBtn').on('click', function() {
+        var movesText = moveList.map(move => move.san).join(', '); // Collect moves in SAN format
+        navigator.clipboard.writeText(movesText).then(function() {
+            swal("Success", "Moves copied to clipboard!", "success");
+        }, function(err) {
+            swal("Error", "Failed to copy moves: " + err, "error");
+        });
+    });
+
+    $('#printMovesBtn').on('click', function() {
+        var movesText = moveList.map(move => move.san).join(', '); // Collect moves in SAN format
+        var printWindow = window.open('', '', 'height=400,width=600');
+        printWindow.document.write('<html><head><title>Chess Moves</title></head><body>');
+        printWindow.document.write('<h1>Recorded Chess Moves</h1>');
+        printWindow.document.write('<pre>' + movesText + '</pre>');
+        printWindow.document.write('</body></html>');
+        printWindow.document.close();
+        printWindow.print();
+    });
+
     updateStatus();
 });
-
