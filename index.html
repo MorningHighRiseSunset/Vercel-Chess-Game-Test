@@ -123,6 +123,13 @@
                             </div>
                         </div>
                     </div>
+                    <!-- Chess Moves Section -->
+                    <div id="chessMoves" style="text-align: center; margin-top: 20px;">
+                        <h3>Chess Moves</h3>
+                        <input type="button" class="yellowButton" id="copyMovesBtn" value="COPY">
+                        <input type="button" class="yellowButton" id="printMovesBtn" value="PRINT">
+                        <div id="pgn" class="pgn-box" style="width: 200px;"></div>
+                    </div>
                 </div>
             </article>
             <head>
@@ -147,10 +154,6 @@
             </head>
             <body>
                 <div id="board" style="width: 400px;"></div>
-                <h3>Chess Moves</h3>
-                <input type="button" class="yellowButton" id="copyMovesBtn" value="COPY">
-                <input type="button" class="yellowButton" id="printMovesBtn" value="PRINT">
-                <div id="pgn" class="pgn-box" style="width: 200px;"></div>
                 <script src="chessboard.js"></script>
                 <script>
                     function displayPopup() {
