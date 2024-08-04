@@ -50,155 +50,154 @@
             <div class="pfp-icon"></div>
             <div class="pfp-icon"></div>
         </div>
-    <head>
-        <meta charset="utf-8">
-        <meta name="keywords" content="Chess, Chessboard, Javascript, Play Chess, Javascript Chess, three.js, chessboard.js, chessboard3.js">
-        <link rel="shortcut icon" href="img/favicon.ico" type="image/x-icon" />
-        <link rel="stylesheet" href="css/site.css">
-        <link rel="stylesheet" href="css/chessboard.css">
-        <link rel="stylesheet" href="css/play.css">
-        <link rel="stylesheet" href="css/sweetalert.css">
-        <script src="js/sweetalert.min.js"></script>
-        <script src="js/jquery-2.1.3.min.js"></script>
-        <script src="js/three.js"></script>
-        <script src="js/OrbitControls.js"></script>
-        <script src="js/chessboard3.js"></script>
-        <script src="js/chessboard.js"></script>
-        <script src="js/chess.js"></script>
-        <script src="js/raphael-min.js"></script>
-        <script src="js/jquery.sonic-gauge.js"></script>
-        <script src="js/play.js"></script>
-    </head>
-    <body>
-        <header id="header">
-            <h1>CHESS</h1>
-        </header>
-        <div class="banner" id="banner"></div>
-        <article id="container">
-            <div id="board">
-                <h1 class="vertical-align">LOADING...</h1>
-            </div>
-            <div id="side">
-                <div class="buttonpanel">
-                    <input type="button" class="yellowButton" id="flipBtn" value="FLIP">
-                    <input type="button" class="yellowButton" id="dimensionBtn" value="2D">
-                    <input type="button" class="yellowButton" id="resetBtn" value="RESET">
-                    <input type="button" class="yellowButton" value="WAGER" onclick="displayPopup()">
-                    <input type="button" class="yellowButton" value="LINK">
-                    <div id="status"></div>
-                    <div id="gaugebox">
-                        <div id="optionsBox" style="text-align: left;">
-                            <label for="piecesMenu">CHESS SET:</label>
-                            <select id="piecesMenu">
-                                <option value="classic" selected>Classic</option>
-                                <option value="iconic">Iconic</option>
-                            </select>
-                            <br>
-                            <label for="engineMenu">CHESS ENGINE:</label>
-                            <select id="engineMenu">
-                                <option value="js/Player.js">Player</option>
-                                <option value="js/lozza.js" selected>Lozza</option>
-                                <option value="js/stockfish.js">stockfish</option>
-                            </select>
-                            <br>
-                            <label for="moveTime">MOVE TIME (seconds):</label>
-                            <select id="moveTime">
-                                <option value="100">0.1</option>
-                                <option value="200">0.2</option>
-                                <option value="500">0.5</option>
-                                <option value="1000" selected>1</option>
-                                <option value="2000">2</option>
-                                <option value="5000">5</option>
-                                <option value="10000">10</option>
-                                <option value="20000">20</option>
-                            </select>
-                            <br>
-                            <label for="promotion">PROMOTE PAWNS TO:</label>
-                            <select id="promotion">
-                                <option value="q">queens</option>
-                                <option value="n">knights</option>
-                                <option value="r">rooks</option>
-                                <option value="b">bishops</option>
-                            </select>
+        <head>
+            <meta charset="utf-8">
+            <meta name="keywords" content="Chess, Chessboard, Javascript, Play Chess, Javascript Chess, three.js, chessboard.js, chessboard3.js">
+            <link rel="shortcut icon" href="img/favicon.ico" type="image/x-icon" />
+            <link rel="stylesheet" href="css/site.css">
+            <link rel="stylesheet" href="css/chessboard.css">
+            <link rel="stylesheet" href="css/play.css">
+            <link rel="stylesheet" href="css/sweetalert.css">
+            <script src="js/sweetalert.min.js"></script>
+            <script src="js/jquery-2.1.3.min.js"></script>
+            <script src="js/three.js"></script>
+            <script src="js/OrbitControls.js"></script>
+            <script src="js/chessboard3.js"></script>
+            <script src="js/chessboard.js"></script>
+            <script src="js/chess.js"></script>
+            <script src="js/raphael-min.js"></script>
+            <script src="js/jquery.sonic-gauge.js"></script>
+            <script src="js/play.js"></script>
+        </head>
+        <body>
+            <header id="header">
+                <h1>CHESS</h1>
+            </header>
+            <div class="banner" id="banner"></div>
+            <article id="container">
+                <div id="board">
+                    <h1 class="vertical-align">LOADING...</h1>
+                </div>
+                <div id="side">
+                    <div class="buttonpanel">
+                        <input type="button" class="yellowButton" id="flipBtn" value="FLIP">
+                        <input type="button" class="yellowButton" id="dimensionBtn" value="2D">
+                        <input type="button" class="yellowButton" id="resetBtn" value="RESET">
+                        <input type="button" class="yellowButton" value="WAGER" onclick="displayPopup()">
+                        <input type="button" class="yellowButton" value="LINK">
+                        <div id="status"></div>
+                        <div id="gaugebox">
+                            <div id="optionsBox" style="text-align: left;">
+                                <label for="piecesMenu">CHESS SET:</label>
+                                <select id="piecesMenu">
+                                    <option value="classic" selected>Classic</option>
+                                    <option value="iconic">Iconic</option>
+                                </select>
+                                <br>
+                                <label for="engineMenu">CHESS ENGINE:</label>
+                                <select id="engineMenu">
+                                    <option value="js/Player.js">Player</option>
+                                    <option value="js/lozza.js" selected>Lozza</option>
+                                    <option value="js/stockfish.js">stockfish</option>
+                                </select>
+                                <br>
+                                <label for="moveTime">MOVE TIME (seconds):</label>
+                                <select id="moveTime">
+                                    <option value="100">0.1</option>
+                                    <option value="200">0.2</option>
+                                    <option value="500">0.5</option>
+                                    <option value="1000" selected>1</option>
+                                    <option value="2000">2</option>
+                                    <option value="5000">5</option>
+                                    <option value="10000">10</option>
+                                    <option value="20000">20</option>
+                                </select>
+                                <br>
+                                <label for="promotion">PROMOTE PAWNS TO:</label>
+                                <select id="promotion">
+                                    <option value="q">queens</option>
+                                    <option value="n">knights</option>
+                                    <option value="r">rooks</option>
+                                    <option value="b">bishops</option>
+                                </select>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        </article>
-        <head>
-            <style>
-               .container {
-                 position: fixed;
-                 bottom: 0;
-                 right: 0;
-                 width: 535px; /* Change to reduce width */
-                 height: 400px; /* Change to reduce height */
-                 border: none;
-                 overflow: hidden;
-               }
-            </style>
-        </head>
-        <body>
-        </body>
-        <head>
-            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/chessboard-js/1.0.0/chessboard-1.0.0.min.css" />
-            <script src="https://cdnjs.cloudflare.com/ajax/libs/chess.js/0.10.2/chess.min.js"></script>
-            <script src="https://cdnjs.cloudflare.com/ajax/libs/chessboard-js/1.0.0/chessboard-1.0.0.min.js"></script>
-        </head>
-        <body>
-            <div id="board" style="width: 400px;"></div>
-            <h3>Chess Moves</h3>
-            <h4>Highlight moves Then press ctrl + P to print moves (full screen)</h4>
-            <h4>To print only chess moves:</h4>
-            <h4>Highlight Chess moves, right click on text, press print</h4>
-            <div id="pgn" class="pgn-box" style="width: 200px;"></div>
-            <script src="chessboard.js"></script>
-            <script>
-                function displayPopup() {
-                    var popup = document.createElement('div');
-                    popup.innerHTML = '<p>moneyline, spread, total, parlay</p>';
-                    popup.style.backgroundColor = 'white';
-                    popup.style.border = '1px solid black';
-                    popup.style.padding = '20px';
-                    popup.style.width = '300px';
-                    popup.style.position = 'fixed';
-                    popup.style.top = '50%';
-                    popup.style.left = '40%';
-                    popup.style.transform = 'translate(-50%, -50%)';
-                    popup.style.zIndex = '1000';
-                    document.body.appendChild(popup);
-                    setTimeout(function() {
-                        document.body.removeChild(popup);
-                    }, 5000);
-                }
+            </article>
+            <head>
+                <style>
+                   .container {
+                     position: fixed;
+                     bottom: 0;
+                     right: 0;
+                     width: 535px; /* Change to reduce width */
+                     height: 400px; /* Change to reduce height */
+                     border: none;
+                     overflow: hidden;
+                   }
+                </style>
+            </head>
+            <body>
+            </body>
+            <head>
+                <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/chessboard-js/1.0.0/chessboard-1.0.0.min.css" />
+                <script src="https://cdnjs.cloudflare.com/ajax/libs/chess.js/0.10.2/chess.min.js"></script>
+                <script src="https://cdnjs.cloudflare.com/ajax/libs/chessboard-js/1.0.0/chessboard-1.0.0.min.js"></script>
+            </head>
+            <body>
+                <div id="board" style="width: 400px;"></div>
+                <h3>Chess Moves</h3>
+                <input type="button" class="yellowButton" id="copyMovesBtn" value="COPY">
+                <input type="button" class="yellowButton" id="printMovesBtn" value="PRINT">
+                <div id="pgn" class="pgn-box" style="width: 200px;"></div>
+                <script src="chessboard.js"></script>
+                <script>
+                    function displayPopup() {
+                        var popup = document.createElement('div');
+                        popup.innerHTML = '<p>moneyline, spread, total, parlay</p>';
+                        popup.style.backgroundColor = 'white';
+                        popup.style.border = '1px solid black';
+                        popup.style.padding = '20px';
+                        popup.style.width = '300px';
+                        popup.style.position = 'fixed';
+                        popup.style.top = '50%';
+                        popup.style.left = '40%';
+                        popup.style.transform = 'translate(-50%, -50%)';
+                        popup.style.zIndex = '1000';
+                        document.body.appendChild(popup);
+                        setTimeout(function() {
+                            document.body.removeChild(popup);
+                        }, 5000);
+                    }
 
-                function printPGN() {
-                    var pgnContent = document.getElementById('pgn').innerHTML; // Get PGN content
-                    var printWindow = window.open('', '', 'height=600,width=800');
-                    printWindow.document.write('<html><head><title>Print PGN</title>');
-                    printWindow.document.write('</head><body>');
-                    printWindow.document.write('<h1>PGN</h1>');
-                    printWindow.document.write(pgnContent); // Write PGN content to print window
-                    printWindow.document.write('</body></html>');
-                    printWindow.document.close();
-                    printWindow.print(); // Trigger print dialog
-                }
+                    function printPGN() {
+                        var pgnContent = document.getElementById('pgn').innerHTML; // Get PGN content
+                        var printWindow = window.open('', '', 'height=600,width=800');
+                        printWindow.document.write('<html><head><title>Print PGN</title>');
+                        printWindow.document.write('</head><body>');
+                        printWindow.document.write('<h1>PGN</h1>');
+                        printWindow.document.write(pgnContent); // Write PGN content to print window
+                        printWindow.document.write('</body></html>');
+                        printWindow.document.close();
+                        printWindow.print(); // Trigger print dialog
+                    }
 
-                // New function to print PGN content
-                function printPGNContent() {
-                    var pgnContent = document.getElementById('pgn').innerHTML; // Get PGN content
-                    var printWindow = window.open('', '', 'height=600,width=800');
-                    printWindow.document.write('<html><head><title>Print PGN</title>');
-                    printWindow.document.write('</head><body>');
-                    printWindow.document.write('<h1>PGN</h1>');
-                    printWindow.document.write(pgnContent); // Write PGN content to print window
-                    printWindow.document.write('</body></html>');
-                    printWindow.document.close();
-                    printWindow.print(); // Trigger print dialog
-                }
+                    // New function to print PGN content
+                    function printPGNContent() {
+                        var pgnContent = document.getElementById('pgn').innerHTML; // Get PGN content
+                        var printWindow = window.open('', '', 'height=600,width=800');
+                        printWindow.document.write('<html><head><title>Print PGN</title>');
+                        printWindow.document.write('</head><body>');
+                        printWindow.document.write('<h1>PGN</h1>');
+                        printWindow.document.write(pgnContent); // Write PGN content to print window
+                        printWindow.document.write('</body></html>');
+                        printWindow.document.close();
+                        printWindow.print(); // Trigger print dialog
+                    }
 
-                // Attach the print function to the new button
-                document.getElementById('printPGNBtn').onclick = printPGNContent;
-            </script>
-        </body>
-    </html>
+                    // Attach the print function to the new button
+                    document.getElementById('printMovesBtn').onclick = printPGNContent;
+                </script>
+            </body>
+        </html>
