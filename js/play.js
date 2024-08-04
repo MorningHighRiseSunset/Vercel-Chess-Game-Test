@@ -13,7 +13,7 @@ $(function() {
     var entirePGN = ''; // longer than current PGN when rewind buttons are clicked
 
     var board;
-    var game = new Chess(), // move validation, etc.
+    var game = new Chess(), // move validation, etc.    
         statusEl = $('#status'),
         fenEl = $('#fen'),
         pgnEl = $('#pgn');
@@ -469,7 +469,7 @@ $(function() {
             engine.postMessage('uci');
             console.log("GUI: ucinewgame");
             engine.postMessage('ucinewgame');
-            updateScoreGauge(0); // they each act a little differently
+            updateScoreGauge(0); // they each act a little differently ( Chess Bot )
             if (jsURL.match(/Player/)) {
                 swal('Using the tiny p4wn engine, which plays at an amateur level.');
             } else if (jsURL.match(/lozza/)) {
