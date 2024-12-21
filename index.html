@@ -3,6 +3,14 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <!-- Google tag (gtag.js) -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-E1JEMV1ZQS"></script>
+        <script>
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-E1JEMV1ZQS');
+        </script>
     </head>
     <body>
         <div class="rectangle-box">
@@ -137,31 +145,29 @@
                     }
 
                     function printPGN() {
-                        var pgnContent = document.getElementById('pgn').innerHTML; // Get PGN content
+                        var pgnContent = document.getElementById('pgn').innerHTML;
                         var printWindow = window.open('', '', 'height=600,width=800');
                         printWindow.document.write('<html><head><title>Print PGN</title>');
                         printWindow.document.write('</head><body>');
                         printWindow.document.write('<h1>PGN</h1>');
-                        printWindow.document.write(pgnContent); // Write PGN content to print window
+                        printWindow.document.write(pgnContent);
                         printWindow.document.write('</body></html>');
                         printWindow.document.close();
-                        printWindow.print(); // Trigger print dialog
+                        printWindow.print();
                     }
 
-                    // New function to print PGN content
                     function printPGNContent() {
-                        var pgnContent = document.getElementById('pgn').innerHTML; // Get PGN content
+                        var pgnContent = document.getElementById('pgn').innerHTML;
                         var printWindow = window.open('', '', 'height=600,width=800');
                         printWindow.document.write('<html><head><title>Print PGN</title>');
                         printWindow.document.write('</head><body>');
                         printWindow.document.write('<h1>PGN</h1>');
-                        printWindow.document.write(pgnContent); // Write PGN content to print window
+                        printWindow.document.write(pgnContent);
                         printWindow.document.write('</body></html>');
                         printWindow.document.close();
-                        printWindow.print(); // Trigger print dialog
+                        printWindow.print();
                     }
 
-                    // Attach the print function to the new button
                     document.getElementById('printMovesBtn').onclick = printPGNContent;
                 </script>
             </body>
