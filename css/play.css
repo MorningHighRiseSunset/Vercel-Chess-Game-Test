@@ -57,7 +57,7 @@
     width: 130px;
     padding: 3px;
     margin: 3px;
-    float: right; /* Align to the right */
+    float: right;
     position: relative;
     text-align: left;
     border: 1px solid red;
@@ -68,8 +68,8 @@
     font-weight: lighter;
     font-size: 14px;
     height: 260px;
-    float: right; /* Align to the right */
-    margin-right: 10px; /* Add margin to the right */
+    float: right;
+    margin-right: 10px;
 }
 .littleButton {
     -moz-box-shadow: 0px 1px 0px 0px #fff6af;
@@ -131,10 +131,11 @@
     font-family: Arial, sans-serif;
     font-size:15px;
     font-weight:bold;
-    padding:6px 12px;
+    padding:6px 15px;
     text-decoration:none;
     text-shadow:0px 1px 0px #ffee66;
-    width:80px;
+    width: auto;
+    min-width: 120px;
 }
 
 .yellowButton:hover {
@@ -154,36 +155,36 @@
 }
 
 .pgn-box {
-    border: 2px solid #ffaa22; /* Border color */
-    padding: 10px; /* Padding inside the box */
-    background-color: rgba(0, 0, 0, 0.8); /* Semi-transparent background */
-    color: white; /* Text color */
-    border-radius: 5px; /* Rounded corners */
-    margin-top: 10px; /* Space above the box */
-    position: relative; /* Positioning context for the button */
-    height: 150px; /* Set a height to ensure the button fits well */
-    display: flex; /* Use flexbox for alignment */
-    flex-direction: column; /* Stack items vertically */
-    justify-content: center; /* Center items vertically */
-    align-items: center; /* Center items horizontally */
+    border: 2px solid #ffaa22;
+    padding: 10px;
+    background-color: rgba(0, 0, 0, 0.8);
+    color: white;
+    border-radius: 5px;
+    margin-top: 10px;
+    position: relative;
+    height: 150px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }
 
 .pgn-box #pgn-content {
-    margin-bottom: 40px; /* Space for the button */
+    margin-bottom: 40px;
 }
 
 .pgn-box button {
-    background-color: #ffaa22; /* Button background color */
-    color: black; /* Button text color */
-    border: none; /* No border */
-    border-radius: 5px; /* Rounded corners */
-    padding: 5px 10px; /* Padding for the button */
-    cursor: pointer; /* Pointer cursor on hover */
-    font-size: 14px; /* Font size */
-    position: relative; /* Positioning the button */
-    margin-top: 5px; /* Space between buttons */
+    background-color: #ffaa22;
+    color: black;
+    border: none;
+    border-radius: 5px;
+    padding: 5px 10px;
+    cursor: pointer;
+    font-size: 14px;
+    position: relative;
+    margin-top: 5px;
 }
 
 .pgn-box button:hover {
-    background-color: #ffec64; /* Change background on hover */
+    background-color: #ffec64;
 }
