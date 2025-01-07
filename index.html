@@ -93,13 +93,32 @@
                             </div>
                         </div>
                     </div>
-                    <!-- Chess Moves Section -->
-                    <div id="chessMoves" style="text-align: center; margin-top: 20px;">
-                        <h3>Chess Moves</h3>
-                        <input type="button" class="yellowButton" id="copyMovesBtn" value="COPY">
-                        <input type="button" class="yellowButton" id="printMovesBtn" value="PRINT">
-                        <div id="pgn" class="pgn-box" style="width: 200px;"></div>
-                    </div>
+
+                <!-- Chess Moves and Instructions Container -->
+<div style="margin-top: 20px;">
+    <!-- Chess Moves Section -->
+    <div id="chessMoves" style="text-align: center;">
+        <h3>Chess Moves</h3>
+        <input type="button" class="yellowButton" id="copyMovesBtn" value="COPY">
+        <input type="button" class="yellowButton" id="printMovesBtn" value="PRINT">
+        <div id="pgn" class="pgn-box" style="width: 200px;"></div>
+    </div>
+    
+    <!-- Instructions Section -->
+    <div class="instructions-box" style="margin-top: 20px; padding: 10px; border: 1px solid #ccc; border-radius: 5px; background-color: #f9f9f9; width: 200px;">
+        <h4 style="margin-bottom: 10px;">How to Play</h4>
+        <p style="text-align: left; font-size: 14px;">
+            1. Click on a piece to select it<br>
+            2. Click on a valid square to move the piece<br>
+            3. The computer will respond with its move<br>
+            <br>
+            <strong>Mobile Users:</strong><br>
+            • Press and hold a piece for 1 second, then tap the destination square<br>
+            • For best mobile experience, use the 2D version (click 2D button above)
+        </p>
+    </div>
+</div>
+
                 </div>
             </article>
             <head>
