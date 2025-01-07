@@ -64,27 +64,51 @@ $(function() {
         var fudge = 5;
         var windowWidth = $(window).width();
         var windowHeight = $(window).height();
-        var desiredBoardWidth = windowWidth - $('#side').outerWidth(true) - fudge;
-        var desiredBoardHeight = windowHeight - $('#header').outerHeight(true) - $('#banner').outerHeight(true) - $('#footer').outerHeight(true) - fudge;
-
-        var boardDiv = $('#board');
-        if (board3D) {
-            desiredBoardWidth &= 0xFFFC; // mod 4 = 0
-            desiredBoardHeight -= (desiredBoardHeight % 3); // mod 3 = 0
-            if (desiredBoardWidth * 0.75 > desiredBoardHeight) {
-                desiredBoardWidth = desiredBoardHeight * 4 / 3;
+        
+        // For mobile devices
+        if (windowWidth < 768) {  // Standard mobile breakpoint
+            var boardDiv = $('#board');
+            // Make side panel stack below board on mobile
+            $('#side').css({
+                'float': 'none',
+                'width': '100%',
+                'margin-top': '20px'
+            });
+            // Make board take full width on mobile
+            desiredBoardWidth = windowWidth - (2 * fudge);
+            if (board3D) {
+                desiredBoardWidth &= 0xFFFC; // mod 4 = 0
+                boardDiv.css('width', desiredBoardWidth);
+                boardDiv.css('height', (desiredBoardWidth * 0.75));
+            } else {
+                boardDiv.css('width', desiredBoardWidth);
+                boardDiv.css('height', desiredBoardWidth);
             }
-            boardDiv.css('width', desiredBoardWidth);
-            boardDiv.css('height', (desiredBoardWidth * 0.75));
         } else {
-            desiredBoardWidth = Math.min(desiredBoardWidth, desiredBoardHeight);
-            boardDiv.css('width', desiredBoardWidth);
-            boardDiv.css('height', desiredBoardHeight);
+            // Original desktop logic
+            var desiredBoardWidth = windowWidth - $('#side').outerWidth(true) - fudge;
+            var desiredBoardHeight = windowHeight - $('#header').outerHeight(true) - $('#banner').outerHeight(true) - $('#footer').outerHeight(true) - fudge;
+    
+            var boardDiv = $('#board');
+            if (board3D) {
+                desiredBoardWidth &= 0xFFFC;
+                desiredBoardHeight -= (desiredBoardHeight % 3);
+                if (desiredBoardWidth * 0.75 > desiredBoardHeight) {
+                    desiredBoardWidth = desiredBoardHeight * 4 / 3;
+                }
+                boardDiv.css('width', desiredBoardWidth);
+                boardDiv.css('height', (desiredBoardWidth * 0.75));
+            } else {
+                desiredBoardWidth = Math.min(desiredBoardWidth, desiredBoardHeight);
+                boardDiv.css('width', desiredBoardWidth);
+                boardDiv.css('height', desiredBoardHeight);
+            }
         }
+        
         if (board !== undefined) {
             board.resize();
         }
-    }
+    }    
 
     function fireEngine() {
         engineRunning = true;
