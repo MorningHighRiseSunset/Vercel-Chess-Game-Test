@@ -188,3 +188,58 @@
 .pgn-box button:hover {
     background-color: #ffec64;
 }
+
+/* Mobile responsiveness */
+@media screen and (max-width: 768px) {
+    #container {
+        display: flex;
+        flex-direction: column;
+        padding: 5px;
+    }
+
+    #board {
+        margin: 0 auto;
+    }
+
+    #side {
+        width: 100% !important;
+        float: none !important;
+        margin: 20px 0 !important;
+    }
+
+    .buttonpanel {
+        width: 100%;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 5px;
+    }
+
+    .yellowButton {
+        margin: 2px;
+        font-size: 14px;
+    }
+
+    #optionsBox {
+        width: 100%;
+        padding: 5px;
+    }
+
+    #gaugebox {
+        width: 100%;
+        margin: 10px 0;
+    }
+
+    /* Adjust gauge size for mobile */
+    #gauge {
+        transform: scale(0.8);
+        margin: 0 auto;
+    }
+
+    /* Make PGN box fit mobile width */
+    #pgn {
+        width: 100% !important;
+        max-width: 100%;
+        box-sizing: border-box;
+    }
+}
