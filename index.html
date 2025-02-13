@@ -1,194 +1,201 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-        <!-- Google tag (gtag.js) -->
-        <script async src="https://www.googletagmanager.com/gtag/js?id=G-E1JEMV1ZQS"></script>
-        <script>
-            window.dataLayer = window.dataLayer || [];
-            function gtag(){dataLayer.push(arguments);}
-            gtag('js', new Date());
-            gtag('config', 'G-E1JEMV1ZQS');
-        </script>
-    </head>
-    <body>
-        <div class="rectangle-box">
-            <div class="pfp-icon"></div>
-            <div class="pfp-icon"></div>
-            <div class="pfp-icon"></div>
-            <div class="pfp-icon"></div>
-            <div class="pfp-icon"></div>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-E1JEMV1ZQS"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+        gtag('config', 'G-E1JEMV1ZQS');
+    </script>
+    <link rel="shortcut icon" href="img/favicon.ico" type="image/x-icon" />
+    <link rel="stylesheet" href="css/site.css">
+    <link rel="stylesheet" href="css/chessboard.css">
+    <link rel="stylesheet" href="css/play.css">
+    <link rel="stylesheet" href="css/sweetalert.css">
+    <style>
+        .hint-box {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: rgba(0, 0, 0, 0.8);
+            color: #fff;
+            padding: 15px;
+            border-radius: 8px;
+            display: none;
+            width: 350px;
+            text-align: center;
+            z-index: 1000;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            font-family: 'Arial', sans-serif;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="rectangle-box">
+        <div class="pfp-icon"></div>
+        <div class="pfp-icon"></div>
+        <div class="pfp-icon"></div>
+        <div class="pfp-icon"></div>
+        <div class="pfp-icon"></div>
+    </div>
+
+    <header id="header">
+        <h1>CHESS Player v Computer</h1>
+    </header>
+    <div class="banner" id="banner"></div>
+    <article id="container">
+        <div id="board">
+            <h1 class="vertical-align">LOADING...</h1>
         </div>
-        <head>
-            <meta charset="utf-8">
-            <meta name="keywords" content="Chess, Chessboard, Javascript, Play Chess, Javascript Chess, three.js, chessboard.js, chessboard3.js">
-            <link rel="shortcut icon" href="img/favicon.ico" type="image/x-icon" />
-            <link rel="stylesheet" href="css/site.css">
-            <link rel="stylesheet" href="css/chessboard.css">
-            <link rel="stylesheet" href="css/play.css">
-            <link rel="stylesheet" href="css/sweetalert.css">
-            <script src="js/sweetalert.min.js"></script>
-            <script src="js/jquery-2.1.3.min.js"></script>
-            <script src="js/three.js"></script>
-            <script src="js/OrbitControls.js"></script>
-            <script src="js/chessboard3.js"></script>
-            <script src="js/chessboard.js"></script>
-            <script src="js/chess.js"></script>
-            <script src="js/raphael-min.js"></script>
-            <script src="js/jquery.sonic-gauge.js"></script>
-            <script src="js/play.js"></script>
-        </head>
-        <body>
-            <header id="header">
-                <title>CHESS Player v Computer</title>
-            </header>
-            <div class="banner" id="banner"></div>
-            <article id="container">
-                <div id="board">
-                    <h1 class="vertical-align">LOADING...</h1>
-                </div>
-                <div id="side">
-                    <div class="buttonpanel">
-                        <input type="button" class="yellowButton" id="flipBtn" value="FLIP">
-                        <input type="button" class="yellowButton" id="dimensionBtn" value="2D">
-                        <input type="button" class="yellowButton" id="resetBtn" value="RESET">
-                        <input type="button" class="yellowButton" value="WAGER" onclick="displayPopup()">
-                        <input type="button" class="yellowButton" value="Click to Join Player v Player" onclick="window.location.href='https://d825fb34-8b72-4eb6-9935-ef5a86f17ca5-00-1kdak5z6iz9of.picard.replit.dev/';">
-                        <div id="status"></div>
-                        <div id="gaugebox">
-                            <div id="optionsBox" style="text-align: left;">
-                                <label for="piecesMenu">CHESS SET:</label>
-                                <select id="piecesMenu">
-                                    <option value="classic" selected>Classic</option>
-                                    <option value="iconic">Iconic</option>
-                                </select>
-                                <br>
-                                <label for="engineMenu">CHESS ENGINE:</label>
-                                <select id="engineMenu">
-                                    <option value="js/Player.js">Player</option>
-                                    <option value="js/lozza.js" selected>Lozza</option>
-                                    <option value="js/stockfish.js">stockfish</option>
-                                </select>
-                                <br>
-                                <label for="moveTime">MOVE TIME (seconds):</label>
-                                <select id="moveTime">
-                                    <option value="100">0.1</option>
-                                    <option value="200">0.2</option>
-                                    <option value="500">0.5</option>
-                                    <option value="1000" selected>1</option>
-                                    <option value="2000">2</option>
-                                    <option value="5000">5</option>
-                                    <option value="10000">10</option>
-                                    <option value="20000">20</option>
-                                </select>
-                                <br>
-                                <label for="promotion">PROMOTE PAWNS TO:</label>
-                                <select id="promotion">
-                                    <option value="q">queens</option>
-                                    <option value="n">knights</option>
-                                    <option value="r">rooks</option>
-                                    <option value="b">bishops</option>
-                                </select>
-                            </div>
-                        </div>
+        <div id="side">
+            <div class="buttonpanel">
+                <input type="button" class="yellowButton" id="flipBtn" value="FLIP">
+                <input type="button" class="yellowButton" id="dimensionBtn" value="2D">
+                <input type="button" class="yellowButton" id="resetBtn" value="RESET">
+                <input type="button" class="yellowButton" value="WAGER" onclick="displayPopup()">
+                <input type="button" class="yellowButton" value="Click to Join Player v Player"
+                       onclick="window.location.href='https://d825fb34-8b72-4eb6-9935-ef5a86f17ca5-00-1kdak5z6iz9of.picard.replit.dev/';">
+                <div id="status"></div>
+                <div id="gaugebox">
+                    <div id="optionsBox" style="text-align: left;">
+                        <label for="piecesMenu">CHESS SET:</label>
+                        <select id="piecesMenu">
+                            <option value="classic" selected>Classic</option>
+                            <option value="iconic">Iconic</option>
+                        </select>
+                        <br>
+                        <label for="engineMenu">CHESS ENGINE:</label>
+                        <select id="engineMenu">
+                            <option value="js/Player.js">Player</option>
+                            <option value="js/lozza.js" selected>Lozza</option>
+                            <option value="js/stockfish.js">stockfish</option>
+                        </select>
+                        <br>
+                        <label for="moveTime">MOVE TIME (seconds):</label>
+                        <select id="moveTime">
+                            <option value="100">0.1</option>
+                            <option value="200">0.2</option>
+                            <option value="500">0.5</option>
+                            <option value="1000" selected>1</option>
+                            <option value="2000">2</option>
+                            <option value="5000">5</option>
+                            <option value="10000">10</option>
+                            <option value="20000">20</option>
+                        </select>
+                        <br>
+                        <label for="promotion">PROMOTE PAWNS TO:</label>
+                        <select id="promotion">
+                            <option value="q">queens</option>
+                            <option value="n">knights</option>
+                            <option value="r">rooks</option>
+                            <option value="b">bishops</option>
+                        </select>
                     </div>
-
-<!-- Chess Moves and Instructions Container -->
-<div style="margin-top: 20px;">
-    <!-- Chess Moves Section -->
-    <div id="chessMoves" style="text-align: center;">
-        <h3>Chess Moves</h3>
-        <input type="button" class="yellowButton" id="copyMovesBtn" value="COPY">
-        <input type="button" class="yellowButton" id="printMovesBtn" value="PRINT">
-        <div id="pgn" class="pgn-box" style="width: 200px;"></div>
-    </div>
-    
-    <!-- Instructions Section -->
-    <div class="instructions-box" style="margin-top: 20px; padding: 10px; border: 1px solid #ccc; border-radius: 5px; background-color: #f9f9f9; width: 200px;">
-        <h4 style="margin-bottom: 10px;">How to Play</h4>
-        <p style="text-align: left; font-size: 14px;">
-            1. Click on a piece to select it<br>
-            2. Click on a valid square to move the piece<br>
-            3. The computer will respond with its move<br>
-            <br>
-            <strong>Mobile Users:</strong><br>
-            • Press and hold a piece for 1 second, then tap the destination square<br>
-            • For best mobile experience, use the 2D version (click 2D button above)
-        </p>
-    </div>
-</div>
-
-
                 </div>
-            </article>
-            <head>
-                <style>
-                   .container {
-                     position: fixed;
-                     bottom: 0;
-                     right: 0;
-                     width: 535px; /* Change to reduce width */
-                     height: 400px; /* Change to reduce height */
-                     border: none;
-                     overflow: hidden;
-                   }
-                </style>
-            </head>
-            <body>
-            </body>
-            <head>
-                <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/chessboard-js/1.0.0/chessboard-1.0.0.min.css" />
-                <script src="https://cdnjs.cloudflare.com/ajax/libs/chess.js/0.10.2/chess.min.js"></script>
-                <script src="https://cdnjs.cloudflare.com/ajax/libs/chessboard-js/1.0.0/chessboard-1.0.0.min.js"></script>
-            </head>
-            <body>
-                <div id="board" style="width: 400px;"></div>
-                <script src="chessboard.js"></script>
-                <script>
-                    function displayPopup() {
-                        var popup = document.createElement('div');
-                        popup.innerHTML = '<p>moneyline, spread, total, parlay</p>';
-                        popup.style.backgroundColor = 'white';
-                        popup.style.border = '1px solid black';
-                        popup.style.padding = '20px';
-                        popup.style.width = '300px';
-                        popup.style.position = 'fixed';
-                        popup.style.top = '50%';
-                        popup.style.left = '40%';
-                        popup.style.transform = 'translate(-50%, -50%)';
-                        popup.style.zIndex = '1000';
-                        document.body.appendChild(popup);
-                        setTimeout(function() {
-                            document.body.removeChild(popup);
-                        }, 5000);
-                    }
+            </div>
 
-                    function printPGN() {
-                        var pgnContent = document.getElementById('pgn').innerHTML;
-                        var printWindow = window.open('', '', 'height=600,width=800');
-                        printWindow.document.write('<html><head><title>Print PGN</title>');
-                        printWindow.document.write('</head><body>');
-                        printWindow.document.write('<h1>PGN</h1>');
-                        printWindow.document.write(pgnContent);
-                        printWindow.document.write('</body></html>');
-                        printWindow.document.close();
-                        printWindow.print();
-                    }
+            <!-- Chess Moves and Instructions Container -->
+            <div style="margin-top: 20px;">
+                <!-- Chess Moves Section -->
+                <div id="chessMoves" style="text-align: center;">
+                    <h3>Chess Moves</h3>
+                    <input type="button" class="yellowButton" id="copyMovesBtn" value="COPY">
+                    <input type="button" class="yellowButton" id="printMovesBtn" value="PRINT">
+                    <div id="pgn" class="pgn-box" style="width: 200px;"></div>
+                </div>
 
-                    function printPGNContent() {
-                        var pgnContent = document.getElementById('pgn').innerHTML;
-                        var printWindow = window.open('', '', 'height=600,width=800');
-                        printWindow.document.write('<html><head><title>Print PGN</title>');
-                        printWindow.document.write('</head><body>');
-                        printWindow.document.write('<h1>PGN</h1>');
-                        printWindow.document.write(pgnContent);
-                        printWindow.document.write('</body></html>');
-                        printWindow.document.close();
-                        printWindow.print();
-                    }
+                <!-- Instructions Section -->
+                <div class="instructions-box" style="margin-top: 20px; padding: 10px; border: 1px solid #ccc; border-radius: 5px; background-color: #f9f9f9; width: 200px;">
+                    <h4 style="margin-bottom: 10px;">How to Play</h4>
+                    <p style="text-align: left; font-size: 14px;">
+                        1. Click on a piece to select it<br>
+                        2. Click on a valid square to move the piece<br>
+                        3. The computer will respond with its move<br>
+                        <br>
+                        <strong>Mobile Users:</strong><br>
+                        • Press and hold a piece for 1 second, then tap the destination square<br>
+                        • For best mobile experience, use the 2D version (click 2D button above)
+                    </p>
+                </div>
+            </div>
+        </div>
+    </article>
 
-                    document.getElementById('printMovesBtn').onclick = printPGNContent;
-                </script>
-            </body>
-        </html>
+    <!-- Hint Box -->
+    <div id="hintBox" class="hint-box"></div>
+
+    <script src="js/sweetalert.min.js"></script>
+    <script src="js/jquery-2.1.3.min.js"></script>
+    <script src="js/three.js"></script>
+    <script src="js/OrbitControls.js"></script>
+    <script src="js/chessboard3.js"></script>
+    <script src="js/chessboard.js"></script>
+    <script src="js/chess.js"></script>
+    <script src="js/raphael-min.js"></script>
+    <script src="js/jquery.sonic-gauge.js"></script>
+    <script src="js/play.js"></script>
+
+    <script>
+        const hints = [
+            "Click then drag the piece you picked to a different square to play.",
+            "You can press 'FLIP' to change board orientation.",
+            "Try playing with different engines: Lozza or Stockfish!",
+            "Found a bug or have suggestions? Contact: maurice13stu@gmail.com",
+            "Remember: Control the center for a strategic advantage.",
+            "Develop your pieces early to get into a strong position.",
+            "Castle early to keep your king safe and connect the rooks.",
+            "Watch out for tactics like forks, pins, and skewers."
+        ];
+
+        const hintIntervals = [4000, 4000, 4000, 8000, 4000, 4000, 4000, 4000];
+        const transitionInterval = 2000;
+
+        let hintIndex = 0;
+
+        function showHint(index) {
+            const hintBox = document.getElementById("hintBox");
+            hintBox.innerText = hints[index];
+            hintBox.style.display = "block";
+
+            setTimeout(() => {
+                hintBox.style.display = "none";
+            }, hintIntervals[index]);
+
+            hintIndex = (hintIndex + 1) % hints.length;
+
+            setTimeout(() => {
+                showHint(hintIndex);
+            }, hintIntervals[index] + transitionInterval);
+        }
+
+        // Start displaying hints on page load
+        window.onload = () => {
+            showHint(hintIndex);
+        };
+
+        function displayPopup() {
+            var popup = document.createElement('div');
+            popup.innerHTML = '<p>moneyline, spread, total, parlay</p>';
+            popup.style.backgroundColor = 'white';
+            popup.style.border = '1px solid black';
+            popup.style.padding = '20px';
+            popup.style.width = '300px';
+            popup.style.position = 'fixed';
+            popup.style.top = '50%';
+            popup.style.left = '40%';
+            popup.style.transform = 'translate(-50%, -50%)';
+            popup.style.zIndex = '1000';
+            document.body.appendChild(popup);
+            setTimeout(function() {
+                document.body.removeChild(popup);
+            }, 5000);
+        }
+    </script>
+
+</body>
+</html>
