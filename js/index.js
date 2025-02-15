@@ -44,5 +44,22 @@ $(document).ready(function() {
     $('#2D').on('click', function() {setUpBoard(2);});
     $('#3D').on('click', function() {setUpBoard(3);});
     setUpBoard(2); // start with a 2D board
+    
+    $('#lockScrollBtn').on('click', function() {
+        if ($('body').hasClass('scroll-locked')) {
+            $('body').removeClass('scroll-locked');
+            $(this).val('LOCK SCROLL');
+        } else {
+            $('body').addClass('scroll-locked');
+            $(this).val('UNLOCK SCROLL');
+        }
+    });
+
+    // Add logic to prevent default scrolling on touch devices
+    $(window).on('touchmove', function(e) {
+        if ($('body').hasClass('scroll-locked')) {
+            e.preventDefault();
+        }
+    });
 });
 //Add new board
