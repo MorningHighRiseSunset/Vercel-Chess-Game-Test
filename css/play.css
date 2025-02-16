@@ -6,6 +6,7 @@
     text-align: center;
 }
 #board {
+    touch-action: none;
     position: relative;
     margin: 0 auto;
     display: inline-block;
@@ -198,7 +199,10 @@
     }
 
     #board {
+        touch-action: none; /* Prevent touch scrolling on the chessboard area */
+        position: relative;
         margin: 0 auto;
+        display: inline-block;
     }
 
     #side {
@@ -244,6 +248,3 @@
     }
 }
 
-.no-scroll {
-    overflow: hidden;
-}
