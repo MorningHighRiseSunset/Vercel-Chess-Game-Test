@@ -225,8 +225,6 @@ $(function() {
 
     // Set up chessboard
     var onDrop = function(source, target) {
-        document.body.classList.remove('no-scroll'); // Remove scroll lock after drop
-    
         if (board.hasOwnProperty('removeGreySquares') && typeof board.removeGreySquares === 'function') {
             board.removeGreySquares();
         }
@@ -237,15 +235,12 @@ $(function() {
             promotion: $("#promotion").val()
         });
     
-        if (move === null) {
-            return 'snapback';
-        }
+        if (move === null) return 'snapback';
     
         if (cursor === 0) {
             console.log("GUI: ucinewgame");
             engine.postMessage("ucinewgame");
         }
-    
         moveList = moveList.slice(0, cursor);
         scoreList = scoreList.slice(0, cursor);
         moveList.push(move);
@@ -288,13 +283,11 @@ $(function() {
             cameraControls: true,
             draggable: true,
             position: 'start',
-            onDragStart: onDragStart,
             onDrop: onDrop,
             onMouseoutSquare: onMouseoutSquare,
             onMouseoverSquare: onMouseoverSquare,
             onSnapEnd: onSnapEnd
         };
-    
         if (board3D) {
             if (pieceSet) {
                 if (pieceSet === 'minions') {
@@ -309,10 +302,6 @@ $(function() {
         } else {
             return new ChessBoard('board', cfg);
         }
-    }
-
-    function onDragStart() {
-        document.body.classList.add('no-scroll');
     }
 
     adjustBoardWidth();
