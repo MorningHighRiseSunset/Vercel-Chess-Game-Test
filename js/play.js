@@ -503,4 +503,110 @@ $(function() {
     });
 
     updateStatus();
+
+(function enableMobileTapToPlace() {
+    // Only activate on mobile devices
+    if (!/Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent)) return;
+
+    // Remove drag-and-drop for mobile
+    if (typeof board === "object" && board !== null) {
+        if (typeof board.draggable !== "undefined") {
+            board.draggable = false;
+        }
+    }
+
+    // Add highlight styles for selected and legal squares
+    if (!document.getElementById('mobile-tap-highlight-style')) {
+        var style = document.createElement('style');
+        style.id = 'mobile-tap-highlight-style';
+        style.innerHTML = `
+            .highlight-yellow { background: yellow !important; opacity: 0.7 !important; }
+            .highlight-green { background: #90ee90 !important; opacity: 0.7 !important; }
+        `;
+        document.head.appendChild(style);
+    }
+
+    let selectedSquare = null;
+    let legalDests = [];
+
+    function clearHighlights() {
+        $('.square-55d63').removeClass('highlight-yellow highlight-green');
+        legalDests = [];
+    }
+
+    // Remove any previous handlers to avoid duplicates
+    $('#board').off('touchstart');
+
+    // Tap-to-select and tap-to-move logic
+    $('#board').on('touchstart', '.square-55d63', function (e) {
+        e.preventDefault();
+        let square = $(this).attr('data-square');
+        let piece = game.get(square);
+
+        // If no square is selected yet
+        if (!selectedSquare) {
+            // Only allow selecting your own piece
+            if (piece && piece.color === game.turn()) {
+                selectedSquare = square;
+                clearHighlights();
+                $(this).addClass('highlight-yellow');
+                // Highlight all legal destination squares
+                let moves = game.moves({ square: square, verbose: true });
+                legalDests = moves.map(m => m.to);
+                legalDests.forEach(dest => {
+                    $(`.square-55d63[data-square="${dest}"]`).addClass('highlight-green');
+                });
+            }
+        } else {
+            // If tapping the same square, deselect
+            if (selectedSquare === square) {
+                clearHighlights();
+                selectedSquare = null;
+                return;
+            }
+            // If tapping a legal destination, move
+            if (legalDests.includes(square)) {
+                let move = game.move({
+                    from: selectedSquare,
+                    to: square,
+                    promotion: $("#promotion").val()
+                });
+                if (move) {
+                    moveList = moveList.slice(0, cursor);
+                    scoreList = scoreList.slice(0, cursor);
+                    moveList.push(move);
+                    scoreList.push(scoreList.length === 0 ? 0 : scoreList[scoreList.length - 1]);
+                    cursor = moveList.length;
+                    board.position(game.fen(), true);
+                    clearHighlights();
+                    selectedSquare = null;
+                    updateStatus();
+                    if (!game.game_over() && game.turn() !== player) {
+                        fireEngine();
+                    }
+                } else {
+                    // Invalid move, just clear selection
+                    clearHighlights();
+                    selectedSquare = null;
+                }
+            } else {
+                // Tapped elsewhere: if it's another of your pieces, select it
+                if (piece && piece.color === game.turn()) {
+                    selectedSquare = square;
+                    clearHighlights();
+                    $(this).addClass('highlight-yellow');
+                    let moves = game.moves({ square: square, verbose: true });
+                    legalDests = moves.map(m => m.to);
+                    legalDests.forEach(dest => {
+                        $(`.square-55d63[data-square="${dest}"]`).addClass('highlight-green');
+                    });
+                } else {
+                    // Otherwise, just clear selection
+                    clearHighlights();
+                    selectedSquare = null;
+                }
+            }
+        }
+    });
+})();
 });
