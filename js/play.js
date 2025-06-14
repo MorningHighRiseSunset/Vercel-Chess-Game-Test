@@ -25,37 +25,6 @@ $(function() {
         $('#dimensionBtn').remove();
     }
 
-    var scoreGauge = $('#gauge').SonicGauge({
-        label:'WHITE\'S ADVANTAGE\n(centipawns)',
-        start: {angle: -230, num: -2000},
-        end: {angle: 50, num: 2000},
-        markers: [
-            {
-                gap: 200,
-                line: {"width" : 12, "stroke" : "none", "fill" : "#cccccc"},
-                text: {"space": -22, "text-anchor" : "middle", "fill" : "#cccccc", "font-size" : 10}
-            },
-            {gap: 100, line: {"width" : 10, "stroke" : "none", "fill" : "#999999"}},
-            {gap: 50, line: {"width" : 8, "stroke" : "none", "fill" : "#888888"}}
-        ],
-        animation_speed : 200,
-        diameter : 300,
-        style: {
-            label: {
-                "font-size": 12,
-                fill: '#cccccc'
-            },
-            center: {
-                fill: 'r#f46a3a-#890b0b'
-            },
-            outline: {
-                fill: 'r#888888-#000000',
-                stroke: 'black',
-                'stroke-width' : 1
-            }
-        }
-    });
-
     function updateScoreGauge(score) {
         scoreGauge.SonicGauge('val', parseInt(score, 10));
     }
