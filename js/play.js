@@ -492,12 +492,33 @@ $(function() {
     });
 
     $('#printMovesBtn').on('click', function() {
-        var movesText = moveList.map(move => move.san).join(', '); // Collect moves in SAN format
+        // Vertically stack moves, one per line
+        var movesText = moveList.map(move => move.san).join('\n');
         var printWindow = window.open('', '', 'height=400,width=600');
-        printWindow.document.write('<html><head><title>Chess Moves</title></head><body>');
-        printWindow.document.write('<h1>Recorded Chess Moves</h1>');
-        printWindow.document.write('<pre>' + movesText + '</pre>');
-        printWindow.document.write('</body></html>');
+        printWindow.document.write(`
+            <html>
+            <head>
+                <title>Chess Moves</title>
+                <style>
+                    body { font-family: Arial, sans-serif; }
+                    h1 { font-size: 1.5em; }
+                    pre { 
+                        font-size: 1.2em; 
+                        line-height: 1.5; 
+                        word-break: break-word; 
+                    }
+                    @media (max-width: 600px) {
+                        body, pre, h1 { font-size: 1.1em !important; }
+                        pre { font-size: 1.2em !important; }
+                    }
+                </style>
+            </head>
+            <body>
+                <h1>Recorded Chess Moves</h1>
+                <pre>${movesText}</pre>
+            </body>
+            </html>
+        `);
         printWindow.document.close();
         printWindow.print();
     });
