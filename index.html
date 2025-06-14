@@ -44,10 +44,6 @@
         <div class="pfp-icon"></div>
         <div class="pfp-icon"></div>
     </div>
-
-    <header id="header">
-        <h1>CHESS Player v Computer</h1>
-    </header>
     
     <div class="banner" id="banner"></div>
     <article id="container">
@@ -60,44 +56,45 @@
                 <input type="button" class="yellowButton" id="dimensionBtn" value="2D">
                 <input type="button" class="yellowButton" id="resetBtn" value="RESET">
                 <input type="button" class="yellowButton" value="WAGER" onclick="displayPopup()">
-                <input type="button" class="yellowButton" value="Click to Join Player v Player"
+                <input type="button" class="yellowButton" value="Join Player v Player"
                        onclick="window.location.href='https://d825fb34-8b72-4eb6-9935-ef5a86f17ca5-00-1kdak5z6iz9of.picard.replit.dev/';">
-                <div id="status"></div>
-                <div id="gaugebox">
-                    <div id="optionsBox" style="text-align: left;">
-                        <label for="piecesMenu">CHESS SET:</label>
-                        <select id="piecesMenu">
-                            <option value="classic" selected>Classic</option>
-                            <option value="iconic">Iconic</option>
-                        </select>
-                        <br>
-                        <label for="engineMenu">CHESS ENGINE:</label>
-                        <select id="engineMenu">
-                            <option value="js/Player.js">Player</option>
-                            <option value="js/lozza.js" selected>Lozza</option>
-                            <option value="js/stockfish.js">stockfish</option>
-                        </select>
-                        <br>
-                        <label for="moveTime">MOVE TIME (seconds):</label>
-                        <select id="moveTime">
-                            <option value="100">0.1</option>
-                            <option value="200">0.2</option>
-                            <option value="500">0.5</option>
-                            <option value="1000" selected>1</option>
-                            <option value="2000">2</option>
-                            <option value="5000">5</option>
-                            <option value="10000">10</option>
-                            <option value="20000">20</option>
-                        </select>
-                        <br>
-                        <label for="promotion">PROMOTE PAWNS TO:</label>
-                        <select id="promotion">
-                            <option value="q">queens</option>
-                            <option value="n">knights</option>
-                            <option value="r">rooks</option>
-                            <option value="b">bishops</option>
-                        </select>
-                    </div>
+                <input type="button" class="yellowButton" id="printMovesBtn" value="PRINT">
+            </div>
+            <div id="status"></div>
+            <div id="gaugebox">
+                <div id="optionsBox" style="text-align: left;">
+                    <label for="piecesMenu">CHESS SET:</label>
+                    <select id="piecesMenu">
+                        <option value="classic" selected>Classic</option>
+                        <option value="iconic">Iconic</option>
+                    </select>
+                    <br>
+                    <label for="engineMenu">CHESS ENGINE:</label>
+                    <select id="engineMenu">
+                        <option value="js/Player.js">Player</option>
+                        <option value="js/lozza.js" selected>Lozza</option>
+                        <option value="js/stockfish.js">stockfish</option>
+                    </select>
+                    <br>
+                    <label for="moveTime">MOVE TIME (seconds):</label>
+                    <select id="moveTime">
+                        <option value="100">0.1</option>
+                        <option value="200">0.2</option>
+                        <option value="500">0.5</option>
+                        <option value="1000" selected>1</option>
+                        <option value="2000">2</option>
+                        <option value="5000">5</option>
+                        <option value="10000">10</option>
+                        <option value="20000">20</option>
+                    </select>
+                    <br>
+                    <label for="promotion">PROMOTE PAWNS TO:</label>
+                    <select id="promotion">
+                        <option value="q">queens</option>
+                        <option value="n">knights</option>
+                        <option value="r">rooks</option>
+                        <option value="b">bishops</option>
+                    </select>
                 </div>
             </div>
 
@@ -107,7 +104,6 @@
                 <div id="chessMoves" style="text-align: center;">
                     <h3>Chess Moves</h3>
                     <input type="button" class="yellowButton" id="copyMovesBtn" value="COPY">
-                    <input type="button" class="yellowButton" id="printMovesBtn" value="PRINT">
                     <div id="pgn" class="pgn-box" style="width: 200px;"></div>
                 </div>
 
