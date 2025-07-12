@@ -247,6 +247,11 @@ $(function() {
         }
     };
 
+    if (/Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent)) {
+        board3D = false;
+        $('#dimensionBtn').remove(); // Optionally remove the 2D/3D toggle button
+    }
+
     function createBoard(pieceSet) {
         var cfg = {
             cameraControls: true,
