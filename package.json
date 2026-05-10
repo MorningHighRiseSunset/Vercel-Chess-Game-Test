@@ -1,4 +1,10 @@
 {
+  "name": "vercel-chess-game-test",
+  "version": "1.0.0",
+  "scripts": {
+    "build": "echo 'No build step required'",
+    "start": "echo 'Static site - no start command needed'"
+  },
   "dependencies": {
     "@vercel/analytics": "^2.0.1"
   }
