@@ -344,8 +344,13 @@ $(function() {
             return;
         }
         board.flip();
-        player = (player === 'w') ? 'b' : 'w';
-        updateStatus();
+        player = player === 'w' ? 'b' : 'w';
+        
+        // Track flip button click
+        if (typeof va !== 'undefined') {
+            va('track', 'board_flipped', { player: player });
+        }
+        
         setTimeout(fireEngine, 1000);
     });
 
@@ -455,6 +460,11 @@ $(function() {
         console.log("GUI: ucinewgame");
         engine.postMessage('ucinewgame');
         updateScoreGauge(0);
+        
+        // Track reset button click
+        if (typeof va !== 'undefined') {
+            va('track', 'game_reset');
+        }
     });
 
     $("#engineMenu").change(function() {
@@ -491,6 +501,11 @@ $(function() {
         var movesText = moveList.map(move => move.san).join(', '); // Collect moves in SAN format
         navigator.clipboard.writeText(movesText).then(function() {
             swal("Success", "Moves copied to clipboard!", "success");
+            
+            // Track copy moves button click
+            if (typeof va !== 'undefined') {
+                va('track', 'moves_copied', { move_count: moveList.length });
+            }
         }, function(err) {
             swal("Error", "Failed to copy moves: " + err, "error");
         });
@@ -526,6 +541,11 @@ $(function() {
         `);
         printWindow.document.close();
         printWindow.print();
+        
+        // Track print moves button click
+        if (typeof va !== 'undefined') {
+            va('track', 'moves_printed', { move_count: moveList.length });
+        }
     });
 
     updateStatus();
