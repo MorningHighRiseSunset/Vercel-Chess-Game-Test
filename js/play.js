@@ -17,37 +17,6 @@ $(function() {
         fenEl = $('#fen'),
         pgnEl = $('#pgn');
 
-    var scoreGauge = $('#gauge').SonicGauge({
-        label: 'WHITE\'S ADVANTAGE\n(centipawns)',
-        start: {angle: -230, num: -2000},
-        end: {angle: 50, num: 2000},
-        markers: [
-            {
-                gap: 200,
-                line: {"width": 12, "stroke": "none", "fill": "#cccccc"},
-                text: {"space": -22, "text-anchor": "middle", "fill": "#cccccc", "font-size": 10}
-            },
-            {gap: 100, line: {"width": 10, "stroke": "none", "fill": "#999999"}},
-            {gap: 50, line: {"width": 8, "stroke": "none", "fill": "#888888"}}
-        ],
-        animation_speed: 200,
-        diameter: 300,
-        style: {
-            label: {
-                "font-size": 12,
-                fill: '#cccccc'
-            },
-            center: {
-                fill: 'r#f46a3a-#890b0b'
-            },
-            outline: {
-                fill: 'r#888888-#000000',
-                stroke: 'black',
-                'stroke-width': 1
-            }
-        }
-    });
-
     var engineRunning = false;
     var board3D = ChessBoard3.webGLEnabled();
 
@@ -56,12 +25,8 @@ $(function() {
         $('#dimensionBtn').remove();
     }
 
-    function updateScoreGauge(score) {
-        scoreGauge.SonicGauge('val', parseInt(score, 10));
-    }
-
     function adjustBoardWidth() {
-        var fudge = 5;
+        var fudge = 20;
         var windowWidth = $(window).width();
         var windowHeight = $(window).height();
         
@@ -74,7 +39,7 @@ $(function() {
                 'width': '100%',
                 'margin-top': '20px'
             });
-            // Make board take full width on mobile
+            // Make board take slightly less than full width on mobile to prevent cutoff
             desiredBoardWidth = windowWidth - (2 * fudge);
             if (board3D) {
                 desiredBoardWidth &= 0xFFFC; // mod 4 = 0
@@ -96,12 +61,16 @@ $(function() {
                 if (desiredBoardWidth * 0.75 > desiredBoardHeight) {
                     desiredBoardWidth = desiredBoardHeight * 4 / 3;
                 }
+                // Zoom out by reducing size to 90%
+                desiredBoardWidth = Math.floor(desiredBoardWidth * 0.9);
                 boardDiv.css('width', desiredBoardWidth);
                 boardDiv.css('height', (desiredBoardWidth * 0.75));
             } else {
                 desiredBoardWidth = Math.min(desiredBoardWidth, desiredBoardHeight);
+                // Zoom out by reducing size to 90%
+                desiredBoardWidth = Math.floor(desiredBoardWidth * 0.9);
                 boardDiv.css('width', desiredBoardWidth);
-                boardDiv.css('height', desiredBoardHeight);
+                boardDiv.css('height', desiredBoardWidth);
             }
         }
         
@@ -146,7 +115,7 @@ $(function() {
                     if (player === 'w') {
                         score = -score; // convert from engine's score to white's score
                     }
-                    updateScoreGauge(score);
+                    // updateScoreGauge(score); // Removed advantage gauge
                     currentScore = score;
                 }
             }
@@ -301,7 +270,9 @@ $(function() {
                     cfg.lightSquareColor = 0x888888;
                     cfg.darkSquareColor = 0x666666;
                 }
-                cfg.pieceSet = 'assets/chesspieces/' + pieceSet + '/{piece}.json';
+                cfg.pieceSet = 'assets/chesspieces/' + pieceSet.toLowerCase() + '/{piece}.json';
+            } else {
+                cfg.pieceSet = 'assets/chesspieces/classic/{piece}.json';
             }
             return new ChessBoard3('board', cfg);
         } else {
@@ -326,7 +297,7 @@ $(function() {
             game.undo();
             cursor--;
         }
-        updateScoreGauge(0);
+        // updateScoreGauge(0); // Removed advantage gauge
         board.position(game.fen());
         updateStatus();
     });
@@ -335,7 +306,7 @@ $(function() {
             game.move(moveList[cursor++]);
         }
         board.position(game.fen());
-        updateScoreGauge(scoreList.length == 0 ? 0 : scoreList[cursor - 1]);
+        // updateScoreGauge(scoreList.length == 0 ? 0 : scoreList[cursor - 1]); // Removed advantage gauge
         updateStatus();
     });
     
@@ -459,7 +430,7 @@ $(function() {
         board.orientation('white');
         console.log("GUI: ucinewgame");
         engine.postMessage('ucinewgame');
-        updateScoreGauge(0);
+        // updateScoreGauge(0); // Removed advantage gauge
         
         // Track reset button click
         if (typeof va !== 'undefined') {
@@ -477,7 +448,7 @@ $(function() {
             engine.postMessage('uci');
             console.log("GUI: ucinewgame");
             engine.postMessage('ucinewgame');
-            updateScoreGauge(0);
+            // updateScoreGauge(0); // Removed advantage gauge
             if (jsURL.match(/Player/)) {
                 swal('Using the tiny p4wn engine, which plays at an amateur level.');
             } else if (jsURL.match(/lozza/)) {

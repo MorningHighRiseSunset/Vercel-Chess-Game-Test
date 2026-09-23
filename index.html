@@ -1,9 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
-<div id="gauge"></div>
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=0.8, maximum-scale=2.0, user-scalable=yes">
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-E1JEMV1ZQS"></script>
     <script>
@@ -56,8 +55,6 @@
                 <input type="button" class="yellowButton" id="dimensionBtn" value="2D">
                 <input type="button" class="yellowButton" id="resetBtn" value="RESET">
                 <input type="button" class="yellowButton" value="WAGER" onclick="displayPopup()">
-                <input type="button" class="yellowButton" value="Join Player v Player"
-                       onclick="window.location.href='https://pvp-chess.netlify.app/';">
                 <input type="button" class="yellowButton" id="printMovesBtn" value="PRINT">
             </div>
             <div id="status"></div>
@@ -99,9 +96,9 @@
             </div>
 
             <!-- Chess Moves and Instructions Container -->
-            <div style="margin-top: 20px;">
+            <div class="moves-instructions-container" style="margin-top: 20px;">
                 <!-- Chess Moves Section -->
-                <div id="chessMoves" style="text-align: center;">
+                <div id="chessMoves" class="chess-moves-section" style="text-align: center;">
                     <h3>Chess Moves</h3>
                     <input type="button" class="yellowButton" id="copyMovesBtn" value="COPY">
                     <div id="pgn" class="pgn-box" style="width: 200px;"></div>
@@ -135,14 +132,22 @@
     <script src="js/chessboard.js"></script>
     <script src="js/chess.js"></script>
     <script src="js/raphael-min.js"></script>
-    <script src="js/jquery.sonic-gauge.js"></script>
     <script src="js/play.js"></script>
 
     <!-- Vercel Analytics -->
     <script>
       window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+      // Only load Vercel analytics script when actually deployed on Vercel
+      if (window.location.hostname.includes('vercel.app')) {
+        var script = document.createElement('script');
+        script.defer = true;
+        script.src = '/_vercel/insights/script.js';
+        script.onerror = function() {
+          console.log('Vercel analytics script failed to load (expected in local development)');
+        };
+        document.head.appendChild(script);
+      }
     </script>
-    <script defer src="/_vercel/insights/script.js"></script>
 
     <script>
         const hints = [

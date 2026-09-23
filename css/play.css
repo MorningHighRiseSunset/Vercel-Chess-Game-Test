@@ -272,6 +272,29 @@
         max-width: 100%;
         box-sizing: border-box;
     }
+
+    /* Fix chess moves and instructions overlapping on mobile */
+    .moves-instructions-container {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+        width: 100%;
+    }
+
+    .chess-moves-section {
+        width: 100%;
+        margin-bottom: 15px;
+    }
+
+    .chess-moves-section .pgn-box {
+        width: 100% !important;
+        max-width: 100%;
+    }
+
+    .instructions-box {
+        width: 100% !important;
+        margin-top: 10px !important;
+    }
 }
 
 @media (max-width: 767px) {
