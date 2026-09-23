@@ -18,15 +18,16 @@ $(function() {
         pgnEl = $('#pgn');
 
     var engineRunning = false;
-    var board3D = ChessBoard3.webGLEnabled();
+    var board3D = true; // Force 3D mode for all users including mobile
 
-    if (!board3D) {
+    if (!ChessBoard3.webGLEnabled()) {
         swal("WebGL unsupported or disabled.", "Using a 2D board...");
+        board3D = false;
         $('#dimensionBtn').remove();
     }
 
     function adjustBoardWidth() {
-        var fudge = 20;
+        var fudge = 10;
         var windowWidth = $(window).width();
         var windowHeight = $(window).height();
         
@@ -39,8 +40,8 @@ $(function() {
                 'width': '100%',
                 'margin-top': '20px'
             });
-            // Make board take slightly less than full width on mobile to prevent cutoff
-            desiredBoardWidth = windowWidth - (2 * fudge);
+            // Make board take more width on mobile for better zoom
+            desiredBoardWidth = windowWidth - fudge;
             if (board3D) {
                 desiredBoardWidth &= 0xFFFC; // mod 4 = 0
                 boardDiv.css('width', desiredBoardWidth);
@@ -61,14 +62,10 @@ $(function() {
                 if (desiredBoardWidth * 0.75 > desiredBoardHeight) {
                     desiredBoardWidth = desiredBoardHeight * 4 / 3;
                 }
-                // Zoom out by reducing size to 90%
-                desiredBoardWidth = Math.floor(desiredBoardWidth * 0.9);
                 boardDiv.css('width', desiredBoardWidth);
                 boardDiv.css('height', (desiredBoardWidth * 0.75));
             } else {
                 desiredBoardWidth = Math.min(desiredBoardWidth, desiredBoardHeight);
-                // Zoom out by reducing size to 90%
-                desiredBoardWidth = Math.floor(desiredBoardWidth * 0.9);
                 boardDiv.css('width', desiredBoardWidth);
                 boardDiv.css('height', desiredBoardWidth);
             }
@@ -185,7 +182,12 @@ $(function() {
         } else {
             entirePGN = currentPGN;
         }
+        // Update both desktop and mobile PGN elements
         pgnEl.html(currentPGN);
+        var mobilePgn = $('#mobileMenu #pgn');
+        if (mobilePgn.length > 0) {
+            mobilePgn.html(currentPGN);
+        }
         if (engineRunning) {
             status += '';
         }
@@ -247,11 +249,6 @@ $(function() {
         }
     };
 
-    if (/Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent)) {
-        board3D = false;
-        $('#dimensionBtn').remove(); // Optionally remove the 2D/3D toggle button
-    }
-
     function createBoard(pieceSet) {
         var cfg = {
             cameraControls: true,
@@ -274,6 +271,9 @@ $(function() {
             } else {
                 cfg.pieceSet = 'assets/chesspieces/classic/{piece}.json';
             }
+            // Set camera to top-down view for better mobile experience
+            cfg.cameraPosition = { x: 0, y: 8, z: 0 };
+            cfg.cameraLookAt = { x: 0, y: 0, z: 0 };
             return new ChessBoard3('board', cfg);
         } else {
             return new ChessBoard('board', cfg);
@@ -468,11 +468,11 @@ $(function() {
     });
 
     // New buttons for copying and printing moves
-    $('#copyMovesBtn').on('click', function() {
+    $('#copyMovesBtn, #copyMovesBtnMobile').on('click', function() {
         var movesText = moveList.map(move => move.san).join(', '); // Collect moves in SAN format
         navigator.clipboard.writeText(movesText).then(function() {
             swal("Success", "Moves copied to clipboard!", "success");
-            
+
             // Track copy moves button click
             if (typeof va !== 'undefined') {
                 va('track', 'moves_copied', { move_count: moveList.length });

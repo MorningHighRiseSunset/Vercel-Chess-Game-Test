@@ -2,29 +2,41 @@
 #container {
     overflow: hidden;
     width: 100%;
+    max-width: 1200px;
+    margin: 20px auto;
     position: relative;
     text-align: center;
+    background: #ffffff;
+    padding: 25px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 #board {
     touch-action: none;
     position: relative;
     margin: 0 auto;
     display: inline-block;
+    border-radius: 4px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
 }
 #side {
-    font-family: helvetica, sans-serif;
-    padding: 10px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    padding: 20px;
     width: 515px;
     position: relative;
     margin: 0 auto;
     display: inline-block;
     vertical-align: top;
+    background: #f8f9fa;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 .buttonpanel {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 10px;
-    margin: 10px 0 18px 0;
+    gap: 12px;
+    margin: 15px 0 20px 0;
     width: 100%;
     max-width: 320px;
     justify-content: center;
@@ -33,19 +45,24 @@
     width: 140px;
     min-width: 0;
     max-width: 100%;
-    font-size: 13px;
-    padding: 8px 0;
+    font-size: 14px;
+    padding: 12px 0;
     box-sizing: border-box;
     margin: 0;
     text-align: center;
+    border-radius: 8px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
 }
 #status {
-    margin: 5px;
-    font-weight: bolder;
-    text-align: left;
-    color: black;
+    margin: 10px;
+    font-weight: 500;
+    text-align: center;
+    color: #2c3e50;
     font-size: 15px;
-    position: left;
+    padding: 8px;
+    border-radius: 4px;
+    background: #ecf0f1;
 }
 #fenBox {
     margin: 5px;
@@ -125,67 +142,49 @@
 }
 
 .yellowButton {
-    -moz-box-shadow: 0px 1px 0px 0px #fff6af;
-    -webkit-box-shadow: 0px 1px 0px 0px #fff6af;
-    box-shadow: 0px 1px 0px 0px #fff6af;
-    background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #ffec64), color-stop(1, #ffab23));
-    background:-moz-linear-gradient(top, #ffec64 5%, #ffab23 100%);
-    background:-webkit-linear-gradient(top, #ffec64 5%, #ffab23 100%);
-    background:-o-linear-gradient(top, #ffec64 5%, #ffab23 100%);
-    background:-ms-linear-gradient(top, #ffec64 5%, #ffab23 100%);
-    background:linear-gradient(to bottom, #ffec64 5%, #ffab23 100%);
-    filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffec64', endColorstr='#ffab23',GradientType=0);
-    background-color:#ffec64;
-    -moz-border-radius:6px;
-    -webkit-border-radius:6px;
-    border-radius:6px;
-    border:1px solid #ffaa22;
-    display:inline-block;
-    cursor:pointer;
-    color:#333333;
-    font-family: Arial, sans-serif;
-    font-size:13px;
-    font-weight:bold;
-    padding:8px 0;
-    text-decoration:none;
-    text-shadow:0px 1px 0px #ffee66;
+    background: #2c3e50;
+    border-radius: 4px;
+    border: 1px solid #34495e;
+    display: inline-block;
+    cursor: pointer;
+    color: white;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    padding: 10px 0;
+    text-decoration: none;
     width: 140px;
     min-width: 0;
     max-width: 100%;
     box-sizing: border-box;
     margin: 0;
     text-align: center;
+    transition: all 0.2s ease;
 }
 
 .yellowButton:hover {
-    background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #ffab23), color-stop(1, #ffec64));
-    background:-moz-linear-gradient(top, #ffab23 5%, #ffec64 100%);
-    background:-webkit-linear-gradient(top, #ffab23 5%, #ffec64 100%);
-    background:-o-linear-gradient(top, #ffab23 5%, #ffec64 100%);
-    background:-ms-linear-gradient(top, #ffab23 5%, #ffec64 100%);
-    background:linear-gradient(to bottom, #ffab23 5%, #ffec64 100%);
-    filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffab23', endColorstr='#ffec64',GradientType=0);
-    background-color:#ffab23;
+    background: #34495e;
+    border-color: #2c3e50;
 }
 
 .yellowButton:active {
-    position:relative;
-    top:1px;
+    background: #1a252f;
 }
 
 .pgn-box {
-    border: 2px solid #ffaa22;
-    padding: 10px;
-    background-color: rgba(0, 0, 0, 0.8);
-    color: white;
-    border-radius: 5px;
-    margin-top: 10px;
+    border: 1px solid #bdc3c7;
+    padding: 15px;
+    background: #ffffff;
+    color: #2c3e50;
+    border-radius: 4px;
+    margin-top: 15px;
     position: relative;
     height: 150px;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
 .pgn-box #pgn-content {
@@ -213,7 +212,9 @@
     #container {
         display: flex;
         flex-direction: column;
-        padding: 5px;
+        padding: 10px;
+        margin: 10px auto;
+        max-width: 100%;
     }
 
     #board {
@@ -227,6 +228,16 @@
         width: 100% !important;
         float: none !important;
         margin: 20px 0 !important;
+        padding: 15px;
+    }
+
+    /* Hide desktop-only elements on mobile */
+    .desktop-only {
+        display: none !important;
+    }
+
+    .moves-instructions-container {
+        display: none !important;
     }
 
     .buttonpanel {
