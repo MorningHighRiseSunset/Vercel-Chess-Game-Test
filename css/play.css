@@ -14,6 +14,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    gap: 20px;
 }
 #board {
     touch-action: none;
@@ -26,11 +27,14 @@
     max-height: calc(100vh - 100px);
     vertical-align: middle;
     line-height: 0;
+    flex-shrink: 1;
+    flex-grow: 1;
 }
 #side {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     padding: 15px;
     width: 350px;
+    min-width: 350px;
     position: relative;
     margin: 0 auto;
     display: inline-block;
@@ -41,6 +45,7 @@
     max-height: calc(100vh - 80px);
     overflow-y: auto;
     color: #ecf0f1;
+    flex-shrink: 0;
 }
 .buttonpanel {
     display: grid;
