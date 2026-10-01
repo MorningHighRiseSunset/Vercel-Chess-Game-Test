@@ -12,10 +12,8 @@ $(function() {
     var entirePGN = ''; // longer than current PGN when rewind buttons are clicked
 
     var board;
-    var game = new Chess(), // move validation, etc.    
-        statusEl = $('#status'),
-        fenEl = $('#fen'),
-        pgnEl = $('#pgn');
+    var game = new Chess(), // move validation, etc.
+        statusEl = $('#status');
 
     var engineRunning = false;
     var board3D = true; // Force 3D mode for all users including mobile
@@ -27,7 +25,7 @@ $(function() {
     }
 
     function adjustBoardWidth() {
-        var fudge = 10;
+        var fudge = 20;
         var windowWidth = $(window).width();
         var windowHeight = $(window).height();
         
@@ -51,21 +49,26 @@ $(function() {
                 boardDiv.css('height', desiredBoardWidth);
             }
         } else {
-            // Original desktop logic
-            var desiredBoardWidth = windowWidth - $('#side').outerWidth(true) - fudge;
-            var desiredBoardHeight = windowHeight - $('#header').outerHeight(true) - $('#banner').outerHeight(true) - $('#footer').outerHeight(true) - fudge;
+            // Desktop logic - fit within viewport
+            var sideWidth = $('#side').outerWidth(true) || 350;
+            var containerPadding = 20;
+            var availableWidth = windowWidth - sideWidth - containerPadding - fudge;
+            var availableHeight = windowHeight - containerPadding - fudge;
     
             var boardDiv = $('#board');
             if (board3D) {
+                desiredBoardWidth = availableWidth;
                 desiredBoardWidth &= 0xFFFC;
-                desiredBoardHeight -= (desiredBoardHeight % 3);
-                if (desiredBoardWidth * 0.75 > desiredBoardHeight) {
-                    desiredBoardWidth = desiredBoardHeight * 4 / 3;
+                var boardHeight = desiredBoardWidth * 0.75;
+                if (boardHeight > availableHeight) {
+                    boardHeight = availableHeight;
+                    desiredBoardWidth = boardHeight / 0.75;
+                    desiredBoardWidth &= 0xFFFC;
                 }
                 boardDiv.css('width', desiredBoardWidth);
-                boardDiv.css('height', (desiredBoardWidth * 0.75));
+                boardDiv.css('height', boardHeight);
             } else {
-                desiredBoardWidth = Math.min(desiredBoardWidth, desiredBoardHeight);
+                desiredBoardWidth = Math.min(availableWidth, availableHeight);
                 boardDiv.css('width', desiredBoardWidth);
                 boardDiv.css('height', desiredBoardWidth);
             }
@@ -174,7 +177,6 @@ $(function() {
             engineRunning = false;
         }
 
-        fenEl.html(game.fen().replace(/ /g, '&nbsp;'));
         var currentPGN = game.pgn({max_width:10,newline_char:"<br>"});
         var matches = entirePGN.lastIndexOf(currentPGN, 0) === 0;
         if (matches) {
@@ -183,7 +185,8 @@ $(function() {
             entirePGN = currentPGN;
         }
         // Update both desktop and mobile PGN elements
-        pgnEl.html(currentPGN);
+        console.log("Updating PGN:", currentPGN);
+        $('#chessMoves #pgn').html(currentPGN);
         var mobilePgn = $('#mobileMenu #pgn');
         if (mobilePgn.length > 0) {
             mobilePgn.html(currentPGN);
@@ -199,15 +202,15 @@ $(function() {
         if (board.hasOwnProperty('removeGreySquares') && typeof board.removeGreySquares === 'function') {
             board.removeGreySquares();
         }
-    
+
         var move = game.move({
             from: source,
             to: target,
             promotion: $("#promotion").val()
         });
-    
+
         if (move === null) return 'snapback';
-    
+
         if (cursor === 0) {
             console.log("GUI: ucinewgame");
             engine.postMessage("ucinewgame");
@@ -217,8 +220,9 @@ $(function() {
         moveList.push(move);
         scoreList.push(scoreList.length === 0 ? 0 : scoreList[scoreList.length - 1]);
         cursor = moveList.length;
-    
+
         board.position(game.fen(), true);
+        updateStatus();
     };
 
     var onSnapEnd = function() {
@@ -272,7 +276,7 @@ $(function() {
                 cfg.pieceSet = 'assets/chesspieces/classic/{piece}.json';
             }
             // Set camera to top-down view for better mobile experience
-            cfg.cameraPosition = { x: 0, y: 8, z: 0 };
+            cfg.cameraPosition = { x: 0, y: 12, z: 0 };
             cfg.cameraLookAt = { x: 0, y: 0, z: 0 };
             return new ChessBoard3('board', cfg);
         } else {
@@ -365,7 +369,6 @@ $(function() {
                 console.log("GUI: position fen " + fen);
                 engine.postMessage('position fen '+ fen);
                 board.position(fen);
-                fenEl.val(fen);
                 pgnEl.empty();
                 updateStatus();
                 swal("Success", "FEN parsed successfully.", "success");
@@ -400,7 +403,6 @@ $(function() {
                 console.log("GUI: position fen " + fen);
                 engine.postMessage('position fen ' + game.fen());
                 board.position(fen, false);
-                fenEl.val(game.fen());
                 pgnEl.empty();
                 moveList = game.history();
                 scoreList = [];
@@ -420,9 +422,8 @@ $(function() {
     $("#resetBtn").on('click', function(e) {
         player = 'w';
         game = new Chess();
-        fenEl.empty();
         pgnEl.empty();
-        largestPGN = '';
+        entirePGN = '';
         moveList = [];
         scoreList = [];
         cursor = 0;
@@ -431,7 +432,7 @@ $(function() {
         console.log("GUI: ucinewgame");
         engine.postMessage('ucinewgame');
         // updateScoreGauge(0); // Removed advantage gauge
-        
+
         // Track reset button click
         if (typeof va !== 'undefined') {
             va('track', 'game_reset');

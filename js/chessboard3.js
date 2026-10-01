@@ -14,7 +14,7 @@
     ];
     var SQUARE_SIZE = 2;
     var CAMERA_POLAR_ANGLE = Math.PI / 4;
-    var CAMERA_DISTANCE = 18.25;
+    var CAMERA_DISTANCE = 25;
     var SPARE_POSITION = {
         sw1 : 'wK', sw2: 'wQ', sw3: 'wR', sw4: 'wB', sw5: 'wN', sw6: 'wP',
         sb1 : 'bK', sb2: 'bQ', sb3: 'bR', sb4: 'bB', sb5: 'bN', sb6: 'bP'
@@ -581,7 +581,7 @@
                 if (cfg.hasOwnProperty('backgroundColor') && typeof cfg.backgroundColor === 'number') {
                     backgroundColor = cfg.backgroundColor;
                 } else {
-                    backgroundColor = 0xBBBBBB;
+                    backgroundColor = 0x2c3e50;
                 }
                 RENDERER.setClearColor(backgroundColor, 1);
 
