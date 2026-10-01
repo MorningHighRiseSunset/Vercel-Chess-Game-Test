@@ -28,7 +28,7 @@ $(function() {
         var fudge = 20;
         var windowWidth = $(window).width();
         var windowHeight = $(window).height();
-        
+
         // For mobile devices
         if (windowWidth < 768) {  // Standard mobile breakpoint
             var boardDiv = $('#board');
@@ -49,31 +49,26 @@ $(function() {
                 boardDiv.css('height', desiredBoardWidth);
             }
         } else {
-            // Desktop logic - fit within viewport
+            // Desktop logic - square board that fits in available space
             var sideWidth = $('#side').outerWidth(true) || 350;
-            var containerPadding = 20;
+            var containerPadding = 40;
             var availableWidth = windowWidth - sideWidth - containerPadding - fudge;
             var availableHeight = windowHeight - containerPadding - fudge;
-    
+
             var boardDiv = $('#board');
+            // Use the smaller dimension to ensure square board
+            desiredBoardWidth = Math.min(availableWidth, availableHeight);
+
             if (board3D) {
-                desiredBoardWidth = availableWidth;
-                desiredBoardWidth &= 0xFFFC;
-                var boardHeight = desiredBoardWidth * 0.75;
-                if (boardHeight > availableHeight) {
-                    boardHeight = availableHeight;
-                    desiredBoardWidth = boardHeight / 0.75;
-                    desiredBoardWidth &= 0xFFFC;
-                }
+                desiredBoardWidth &= 0xFFFC; // mod 4 = 0
                 boardDiv.css('width', desiredBoardWidth);
-                boardDiv.css('height', boardHeight);
+                boardDiv.css('height', desiredBoardWidth * 0.75);
             } else {
-                desiredBoardWidth = Math.min(availableWidth, availableHeight);
                 boardDiv.css('width', desiredBoardWidth);
                 boardDiv.css('height', desiredBoardWidth);
             }
         }
-        
+
         if (board !== undefined) {
             board.resize();
         }
