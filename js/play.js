@@ -99,6 +99,13 @@ $(function() {
                 board.position(game.fen(), true);
                 engineRunning = false;
                 updateStatus();
+
+                // Play move sound for AI
+                var moveSound = document.getElementById('moveSound');
+                if (moveSound) {
+                    moveSound.currentTime = 0;
+                    moveSound.play().catch(e => console.log('Audio play failed:', e));
+                }
             } else {
                 var score = parseScore(line);
                 if (score !== undefined) {
@@ -202,7 +209,6 @@ $(function() {
         if (move === null) return 'snapback';
 
         if (cursor === 0) {
-            console.log("GUI: ucinewgame");
             engine.postMessage("ucinewgame");
         }
         moveList = moveList.slice(0, cursor);
@@ -213,6 +219,13 @@ $(function() {
 
         board.position(game.fen(), true);
         updateStatus();
+
+        // Play move sound
+        var moveSound = document.getElementById('moveSound');
+        if (moveSound) {
+            moveSound.currentTime = 0;
+            moveSound.play().catch(e => console.log('Audio play failed:', e));
+        }
     };
 
     var onSnapEnd = function() {
