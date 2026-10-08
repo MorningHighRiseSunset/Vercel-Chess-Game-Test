@@ -604,7 +604,9 @@
                     CAMERA.position.set(CAMERA_POSITION_BLACK.x, CAMERA_POSITION_BLACK.y, CAMERA_POSITION_BLACK.z);
                 }
 
-                CAMERA.lookAt(new THREE.Vector3(0, -3, 0));
+                // Force top-down view - zoomed in
+                CAMERA.position.set(0, 20, 0);
+                CAMERA.lookAt(new THREE.Vector3(0, 0, 0));
 
                 SCENE.add(CAMERA);
 
@@ -640,7 +642,7 @@
                         } else {
                             CAMERA_CONTROLS.enableZoom = false;
                         }
-                        CAMERA_CONTROLS.target.y = -3;
+                        CAMERA_CONTROLS.target.set(0, 0, 0);
                         CAMERA_CONTROLS.enabled = true;
                     }
                 }

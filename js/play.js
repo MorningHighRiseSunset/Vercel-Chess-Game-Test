@@ -1,8 +1,6 @@
 $(function() {
     var engine = new Worker("js/lozza.js");
-    console.log("GUI: uci");
     engine.postMessage("uci");
-    console.log("GUI: ucinewgame");
     engine.postMessage("ucinewgame");
 
     var moveList = [], scoreList =[];
@@ -49,15 +47,15 @@ $(function() {
                 boardDiv.css('height', desiredBoardWidth);
             }
         } else {
-            // Desktop logic - square board that fits in available space
+            // Desktop logic - make board much larger and centered
             var sideWidth = $('#side').outerWidth(true) || 350;
-            var containerPadding = 40;
-            var availableWidth = windowWidth - sideWidth - containerPadding - fudge;
-            var availableHeight = windowHeight - containerPadding - fudge;
+            var bodyPadding = 40;
+            var availableWidth = windowWidth - sideWidth - bodyPadding - fudge;
+            var availableHeight = windowHeight - bodyPadding - fudge;
 
             var boardDiv = $('#board');
-            // Use the smaller dimension to ensure square board
-            desiredBoardWidth = Math.min(availableWidth, availableHeight);
+            // Use the larger dimension and make it 95% of available space
+            desiredBoardWidth = Math.max(availableWidth, availableHeight) * 0.95;
 
             if (board3D) {
                 desiredBoardWidth &= 0xFFFC; // mod 4 = 0
@@ -79,14 +77,11 @@ $(function() {
         updateStatus();
         var currentScore;
         var msg = "position fen "+game.fen();
-        console.log("GUI: "+msg);
         engine.postMessage(msg);
         msg = 'go movetime ' + $('#moveTime').val();
-        console.log("GUI: "+msg);
         engine.postMessage(msg);
         engine.onmessage = function(event) {
             var line = event.data;
-            console.log("ENGINE: "+line);
             var best = parseBestMove(line);
             if (best !== undefined) {
                 var move = game.move(best);
@@ -270,8 +265,8 @@ $(function() {
             } else {
                 cfg.pieceSet = 'assets/chesspieces/classic/{piece}.json';
             }
-            // Set camera to top-down view for better mobile experience
-            cfg.cameraPosition = { x: 0, y: 12, z: 0 };
+            // Set camera to top-down view
+            cfg.cameraPosition = { x: 0, y: 30, z: 0 };
             cfg.cameraLookAt = { x: 0, y: 0, z: 0 };
             return new ChessBoard3('board', cfg);
         } else {
@@ -478,40 +473,46 @@ $(function() {
         });
     });
 
-    $('#printMovesBtn').on('click', function() {
+    $('#printMovesBtnDesktop, #printMovesBtnMobile').on('click', function() {
         // Vertically stack moves, one per line
-        var movesText = moveList.map(move => move.san).join('\n');
+        var movesText = moveList.map(move => {
+            return move.san || move.toString();
+        }).join('\n');
         var printWindow = window.open('', '', 'height=400,width=600');
-        printWindow.document.write(`
-            <html>
-            <head>
-                <title>Chess Moves</title>
-                <style>
-                    body { font-family: Arial, sans-serif; }
-                    h1 { font-size: 1.5em; }
-                    pre { 
-                        font-size: 1.2em; 
-                        line-height: 1.5; 
-                        word-break: break-word; 
-                    }
-                    @media (max-width: 600px) {
-                        body, pre, h1 { font-size: 1.1em !important; }
-                        pre { font-size: 1.2em !important; }
-                    }
-                </style>
-            </head>
-            <body>
-                <h1>Recorded Chess Moves</h1>
-                <pre>${movesText}</pre>
-            </body>
-            </html>
-        `);
-        printWindow.document.close();
-        printWindow.print();
-        
-        // Track print moves button click
-        if (typeof va !== 'undefined') {
-            va('track', 'moves_printed', { move_count: moveList.length });
+        if (printWindow) {
+            printWindow.document.write(`
+                <html>
+                <head>
+                    <title>Chess Moves</title>
+                    <style>
+                        body { font-family: Arial, sans-serif; }
+                        h1 { font-size: 1.5em; }
+                        pre {
+                            font-size: 1.2em;
+                            line-height: 1.5;
+                            word-break: break-word;
+                        }
+                        @media (max-width: 600px) {
+                            body, pre, h1 { font-size: 1.1em !important; }
+                            pre { font-size: 1.2em !important; }
+                        }
+                    </style>
+                </head>
+                <body>
+                    <h1>Recorded Chess Moves</h1>
+                    <pre>${movesText}</pre>
+                </body>
+                </html>
+            `);
+            printWindow.document.close();
+            printWindow.print();
+
+            // Track print moves button click
+            if (typeof va !== 'undefined') {
+                va('track', 'moves_printed', { move_count: moveList.length });
+            }
+        } else {
+            console.error("Failed to open print window - popup blocker may be active");
         }
     });
 
