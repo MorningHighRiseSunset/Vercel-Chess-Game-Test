@@ -47,15 +47,15 @@ $(function() {
                 boardDiv.css('height', desiredBoardWidth);
             }
         } else {
-            // Desktop logic - make board much larger and centered
+            // Desktop logic - make board much larger
             var sideWidth = $('#side').outerWidth(true) || 350;
-            var bodyPadding = 40;
+            var bodyPadding = 30;
             var availableWidth = windowWidth - sideWidth - bodyPadding - fudge;
             var availableHeight = windowHeight - bodyPadding - fudge;
 
             var boardDiv = $('#board');
-            // Use the larger dimension and make it 95% of available space
-            desiredBoardWidth = Math.max(availableWidth, availableHeight) * 0.95;
+            // Use the larger dimension and make it 1.3x larger
+            desiredBoardWidth = Math.max(availableWidth, availableHeight) * 1.3;
 
             if (board3D) {
                 desiredBoardWidth &= 0xFFFC; // mod 4 = 0

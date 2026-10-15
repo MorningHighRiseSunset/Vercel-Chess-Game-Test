@@ -604,8 +604,8 @@
                     CAMERA.position.set(CAMERA_POSITION_BLACK.x, CAMERA_POSITION_BLACK.y, CAMERA_POSITION_BLACK.z);
                 }
 
-                // Force top-down view - zoomed in
-                CAMERA.position.set(0, 20, 0);
+                // Force completely flat top-down view - very zoomed in
+                CAMERA.position.set(0, 18, 0);
                 CAMERA.lookAt(new THREE.Vector3(0, 0, 0));
 
                 SCENE.add(CAMERA);
@@ -629,15 +629,13 @@
                     if (THREE.OrbitControls !== undefined) {
                         CAMERA_CONTROLS = new THREE.OrbitControls(CAMERA, RENDERER.domElement, RENDERER.domElement);
                         CAMERA_CONTROLS.enablePan = false;
-                        if (cfg.rotateControls) {
-                            CAMERA_CONTROLS.minPolarAngle = Math.PI / 2 * 0.1;
-                            CAMERA_CONTROLS.maxPolarAngle = Math.PI / 2 * 0.8;
-                        } else {
-                            CAMERA_CONTROLS.noRotate = true;
-                        }
+                        // Force completely flat top-down view - disable rotation
+                        CAMERA_CONTROLS.noRotate = true;
+                        CAMERA_CONTROLS.minPolarAngle = 0;
+                        CAMERA_CONTROLS.maxPolarAngle = 0;
                         if (cfg.zoomControls) {
-                            CAMERA_CONTROLS.minDistance = 12;
-                            CAMERA_CONTROLS.maxDistance = 22;
+                            CAMERA_CONTROLS.minDistance = 10;
+                            CAMERA_CONTROLS.maxDistance = 30;
                             CAMERA_CONTROLS.enableZoom = true;
                         } else {
                             CAMERA_CONTROLS.enableZoom = false;
