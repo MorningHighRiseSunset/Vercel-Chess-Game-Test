@@ -54,8 +54,8 @@ $(function() {
             var availableHeight = windowHeight - bodyPadding - fudge;
 
             var boardDiv = $('#board');
-            // Use the larger dimension and make it 1.3x larger
-            desiredBoardWidth = Math.max(availableWidth, availableHeight) * 1.3;
+            // Use the larger dimension and make it 1.5x larger
+            desiredBoardWidth = Math.max(availableWidth, availableHeight) * 1.5;
 
             if (board3D) {
                 desiredBoardWidth &= 0xFFFC; // mod 4 = 0
