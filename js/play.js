@@ -47,21 +47,23 @@ $(function() {
                 boardDiv.css('height', desiredBoardWidth);
             }
         } else {
-            // Desktop logic - make board much larger
+            // Desktop logic
             var sideWidth = $('#side').outerWidth(true) || 350;
             var bodyPadding = 30;
             var availableWidth = windowWidth - sideWidth - bodyPadding - fudge;
             var availableHeight = windowHeight - bodyPadding - fudge;
 
             var boardDiv = $('#board');
-            // Use the larger dimension and make it 1.5x larger
-            desiredBoardWidth = Math.max(availableWidth, availableHeight) * 1.5;
 
             if (board3D) {
+                // 3D board - make it larger
+                desiredBoardWidth = Math.max(availableWidth, availableHeight) * 1.5;
                 desiredBoardWidth &= 0xFFFC; // mod 4 = 0
                 boardDiv.css('width', desiredBoardWidth);
                 boardDiv.css('height', desiredBoardWidth * 0.75);
             } else {
+                // 2D board - make it normal size
+                desiredBoardWidth = Math.min(availableWidth, availableHeight) * 0.8;
                 boardDiv.css('width', desiredBoardWidth);
                 boardDiv.css('height', desiredBoardWidth);
             }
@@ -317,23 +319,26 @@ $(function() {
         updateStatus();
     });
     
-    $('#flipBtn').on('click', function() {
+    $('#flipBtnDesktop, #flipBtnMobile').on('click', function() {
         if (game.game_over()) {
             return;
         }
         board.flip();
-        player = player === 'w' ? 'b' : 'w';
-        
+
         // Track flip button click
         if (typeof va !== 'undefined') {
             va('track', 'board_flipped', { player: player });
         }
-        
-        setTimeout(fireEngine, 1000);
+
+        // Player is always white, AI is always black
+        // Only fire engine if it's black's turn
+        if (!game.game_over() && game.turn() === 'b') {
+            setTimeout(fireEngine, 1000);
+        }
     });
 
-    $('#dimensionBtn').on('click', function() {
-        var dimBtn = $("#dimensionBtn");
+    $('#dimensionBtnDesktop, #dimensionBtnMobile').on('click', function() {
+        var dimBtn = $(this);
         dimBtn.prop('disabled', true);
         var position = board.position();
         var orientation = board.orientation();
@@ -345,7 +350,7 @@ $(function() {
             board = createBoard($('#piecesMenu').val());
             board.orientation(orientation);
             board.position(position);
-            $("#dimensionBtn").prop('disabled', false);
+            dimBtn.prop('disabled', false);
         });
     });
 
@@ -422,7 +427,7 @@ $(function() {
         });
     }));
 
-    $("#resetBtn").on('click', function(e) {
+    $("#resetBtnDesktop, #resetBtnMobile").on('click', function(e) {
         player = 'w';
         game = new Chess();
         pgnEl.empty();
