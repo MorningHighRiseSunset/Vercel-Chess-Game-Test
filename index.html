@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.2, maximum-scale=2.0, user-scalable=yes">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-E1JEMV1ZQS"></script>
     <script>
@@ -21,25 +21,30 @@
         .burger-menu {
             display: none;
             position: fixed;
-            bottom: 20px;
-            left: 20px;
+            bottom: calc(16px + env(safe-area-inset-bottom, 0px));
+            left: calc(16px + env(safe-area-inset-left, 0px));
             z-index: 2000;
             background: #2c3e50;
             border: 1px solid #34495e;
             border-radius: 50%;
-            padding: 15px;
+            padding: 0;
             cursor: pointer;
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-            width: 50px;
-            height: 50px;
+            width: 56px;
+            height: 56px;
+            box-sizing: border-box;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            -webkit-tap-highlight-color: transparent;
         }
 
         .burger-menu span {
             display: block;
-            width: 20px;
+            width: 22px;
             height: 2px;
             background: white;
-            margin: 4px 0;
+            margin: 3px 0;
             border-radius: 1px;
             transition: 0.3s;
         }
@@ -55,24 +60,37 @@
             z-index: 1500;
         }
 
+        .mobile-menu-overlay.active {
+            display: block;
+        }
+
         .mobile-menu-content {
             position: fixed;
-            bottom: -100%;
             left: 0;
+            right: 0;
+            bottom: 0;
             width: 100%;
-            max-height: 80vh;
+            max-width: 100%;
+            max-height: min(80vh, calc(100dvh - env(safe-area-inset-top, 0px)));
             background: #2c3e50;
             z-index: 1600;
-            padding: 20px;
+            padding: 20px 20px calc(20px + env(safe-area-inset-bottom, 0px));
             box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.2);
-            transition: bottom 0.3s ease;
             overflow-y: auto;
+            overflow-x: hidden;
             border-top: 1px solid #5d6d7e;
             border-radius: 20px 20px 0 0;
+            box-sizing: border-box;
+            transform: translateY(110%);
+            visibility: hidden;
+            pointer-events: none;
+            transition: transform 0.3s ease, visibility 0.3s ease;
         }
 
         .mobile-menu-content.active {
-            bottom: 0;
+            transform: translateY(0);
+            visibility: visible;
+            pointer-events: auto;
         }
 
         .mobile-menu-content h3 {
@@ -138,12 +156,12 @@
 
         @media screen and (max-width: 768px) {
             .burger-menu {
-                display: block;
+                display: flex;
             }
         }
 
         .mobile-layout .burger-menu {
-            display: block !important;
+            display: flex !important;
         }
     </style>
 </head>
@@ -164,10 +182,10 @@
     </button>
 
     <!-- Mobile Menu Overlay -->
-    <div class="mobile-menu-overlay" id="menuOverlay" style="display: none;"></div>
+    <div class="mobile-menu-overlay" id="menuOverlay"></div>
 
     <!-- Mobile Menu Content -->
-    <div class="mobile-menu-content" id="mobileMenu" style="bottom: -100%; display: none;">
+    <div class="mobile-menu-content" id="mobileMenu">
         <button class="close-menu" id="closeMenu">&times;</button>
 
         <h3>Game Controls</h3>
@@ -181,22 +199,22 @@
         </div>
 
         <h3>Game Settings</h3>
-        <div id="optionsBox">
-            <label for="piecesMenu">CHESS SET:</label>
-            <select id="piecesMenu">
+        <div class="optionsBox">
+            <label for="piecesMenuMobile">CHESS SET:</label>
+            <select id="piecesMenuMobile">
                 <option value="classic" selected>Classic</option>
                 <option value="iconic">Iconic</option>
             </select>
             <br>
-            <label for="engineMenu">CHESS ENGINE:</label>
-            <select id="engineMenu">
+            <label for="engineMenuMobile">CHESS ENGINE:</label>
+            <select id="engineMenuMobile">
                 <option value="js/Player.js">Player</option>
                 <option value="js/lozza.js" selected>Lozza</option>
                 <option value="js/stockfish.js">stockfish</option>
             </select>
             <br>
-            <label for="moveTime">MOVE TIME (seconds):</label>
-            <select id="moveTime">
+            <label for="moveTimeMobile">MOVE TIME (seconds):</label>
+            <select id="moveTimeMobile">
                 <option value="100">0.1</option>
                 <option value="200">0.2</option>
                 <option value="500">0.5</option>
@@ -207,8 +225,8 @@
                 <option value="20000">20</option>
             </select>
             <br>
-            <label for="promotion">PROMOTE PAWNS TO:</label>
-            <select id="promotion">
+            <label for="promotionMobile">PROMOTE PAWNS TO:</label>
+            <select id="promotionMobile">
                 <option value="q">queens</option>
                 <option value="n">knights</option>
                 <option value="r">rooks</option>
@@ -231,9 +249,9 @@
         </div>
 
         <h3>Chess Moves</h3>
-        <div id="chessMoves" style="text-align: center;">
+        <div class="chessMoves" style="text-align: center;">
             <input type="button" class="yellowButton mobile-menu-btn" id="copyMovesBtnMobile" value="COPY MOVES">
-            <div id="pgn" class="pgn-box" style="width: 100%; margin-top: 10px;"></div>
+            <div id="pgnMobile" class="pgn-box" style="width: 100%; margin-top: 10px;"></div>
         </div>
     </div>
 
@@ -330,13 +348,13 @@
 
         function openMenu() {
             mobileMenu.classList.add('active');
-            mobileMenu.style.display = 'block';
+            menuOverlay.classList.add('active');
             menuOverlay.style.display = 'block';
         }
 
         function closeMenuFunc() {
             mobileMenu.classList.remove('active');
-            mobileMenu.style.display = 'none';
+            menuOverlay.classList.remove('active');
             menuOverlay.style.display = 'none';
         }
 

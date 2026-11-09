@@ -16,13 +16,25 @@ $(function() {
     var engineRunning = false;
     var board3D = true; // Default to 3D on desktop
 
-    // Force 2D mode ONLY on actual mobile devices (check user agent)
-    var isMobile = /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+    // Treat phones and narrow viewports as mobile
+    var isMobileUA = /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+    var isMobile = isMobileUA || window.innerWidth <= 768;
     if (isMobile) {
         board3D = false; // Force 2D on mobile
-        console.log('Mobile device detected - forcing 2D mode');
-        $('body').addClass('mobile-layout'); // Add class for CSS targeting
-        $('.burger-menu').show(); // Ensure burger menu is visible
+        console.log('Mobile layout enabled');
+        $('html, body').addClass('mobile-layout');
+    }
+
+    function controlVal(id) {
+        var $mobile = $('#' + id + 'Mobile');
+        if ($mobile.length) {
+            return $mobile.val();
+        }
+        return $('#' + id).val();
+    }
+
+    function syncControl(id, value) {
+        $('#' + id + ', #' + id + 'Mobile').val(value);
     }
 
     if (board3D && typeof ChessBoard3 !== 'undefined' && !ChessBoard3.webGLEnabled()) {
@@ -36,17 +48,28 @@ $(function() {
         var windowWidth = $(window).width();
         var windowHeight = $(window).height();
 
-        // For mobile devices ONLY (check user agent, not screen width)
+        isMobile = isMobileUA || windowWidth <= 768;
+        if (isMobile) {
+            $('html, body').addClass('mobile-layout');
+        } else {
+            $('html, body').removeClass('mobile-layout');
+        }
+
         if (isMobile) {
             var boardDiv = $('#board');
-            // Make side panel stack below board on mobile
             $('#side').css({
                 'float': 'none',
-                'width': '100%',
-                'margin-top': '20px'
+                'width': '',
+                'margin-top': '0'
             });
-            // Make board responsive to screen size on mobile - use 85% of viewport to prevent cutoff
-            var desiredBoardWidth = Math.floor(windowWidth * 0.85);
+            var horizontalPad = 16;
+            var burgerReserve = 80;
+            var statusReserve = 56;
+            var desiredBoardWidth = Math.floor(Math.min(
+                windowWidth - horizontalPad,
+                windowHeight - burgerReserve - statusReserve
+            ));
+            desiredBoardWidth = Math.max(desiredBoardWidth, 200);
             if (board3D) {
                 desiredBoardWidth &= 0xFFFC; // mod 4 = 0
                 boardDiv.css('width', desiredBoardWidth);
@@ -96,7 +119,7 @@ $(function() {
         var currentScore;
         var msg = "position fen "+game.fen();
         engine.postMessage(msg);
-        msg = 'go movetime ' + $('#moveTime').val();
+        msg = 'go movetime ' + controlVal('moveTime');
         engine.postMessage(msg);
         engine.onmessage = function(event) {
             var line = event.data;
@@ -201,11 +224,7 @@ $(function() {
         }
         // Update both desktop and mobile PGN elements
         console.log("Updating PGN:", currentPGN);
-        $('#chessMoves #pgn').html(currentPGN);
-        var mobilePgn = $('#mobileMenu #pgn');
-        if (mobilePgn.length > 0) {
-            mobilePgn.html(currentPGN);
-        }
+        $('#chessMoves #pgn, #pgnMobile').html(currentPGN);
         if (engineRunning) {
             status += '';
         }
@@ -221,7 +240,7 @@ $(function() {
         var move = game.move({
             from: source,
             to: target,
-            promotion: $("#promotion").val()
+            promotion: controlVal('promotion')
         });
 
         if (move === null) return 'snapback';
@@ -365,9 +384,9 @@ $(function() {
         board.destroy();
         board3D = !board3D;
         adjustBoardWidth();
-        dimBtn.val(board3D? '2D' : '3D');
+        $('#dimensionBtnDesktop, #dimensionBtnMobile').val(board3D? '2D' : '3D');
         setTimeout(function () {
-            board = createBoard($('#piecesMenu').val());
+            board = createBoard(controlVal('piecesMenu'));
             board.orientation(orientation);
             board.position(position);
             dimBtn.prop('disabled', false);
@@ -397,7 +416,7 @@ $(function() {
                 console.log("GUI: position fen " + fen);
                 engine.postMessage('position fen '+ fen);
                 board.position(fen);
-                pgnEl.empty();
+                $('#chessMoves #pgn, #pgnMobile').empty();
                 updateStatus();
                 swal("Success", "FEN parsed successfully.", "success");
             } else {
@@ -431,7 +450,7 @@ $(function() {
                 console.log("GUI: position fen " + fen);
                 engine.postMessage('position fen ' + game.fen());
                 board.position(fen, false);
-                pgnEl.empty();
+                $('#chessMoves #pgn, #pgnMobile').empty();
                 moveList = game.history();
                 scoreList = [];
                 for (var i = 0; i < moveList.length; i++) {
@@ -450,7 +469,7 @@ $(function() {
     $("#resetBtnDesktop, #resetBtnMobile").on('click', function(e) {
         player = 'w';
         game = new Chess();
-        pgnEl.empty();
+        $('#chessMoves #pgn, #pgnMobile').empty();
         entirePGN = '';
         moveList = [];
         scoreList = [];
@@ -467,17 +486,16 @@ $(function() {
         }
     });
 
-    $("#engineMenu").change(function() {
-       console.log($("#engineMenu").val());
+    $("#engineMenu, #engineMenuMobile").change(function() {
+        var jsURL = $(this).val();
+        syncControl('engineMenu', jsURL);
         if (engine) {
-            var jsURL = $("#engineMenu").val();
             engine.terminate();
             engine = new Worker(jsURL);
             console.log("GUI: uci");
             engine.postMessage('uci');
             console.log("GUI: ucinewgame");
             engine.postMessage('ucinewgame');
-            // updateScoreGauge(0); // Removed advantage gauge
             if (jsURL.match(/Player/)) {
                 swal('Using the tiny p4wn engine, which plays at an amateur level.');
             } else if (jsURL.match(/lozza/)) {
@@ -488,12 +506,22 @@ $(function() {
         }
     });
 
-    $('#piecesMenu').change(function() {
+    $('#piecesMenu, #piecesMenuMobile').change(function() {
+        var pieceSet = $(this).val();
+        syncControl('piecesMenu', pieceSet);
         var fen = board.position();
         board.destroy();
-        board = createBoard($('#piecesMenu').val());
+        board = createBoard(pieceSet);
         board.position(fen);
         adjustBoardWidth();
+    });
+
+    $('#moveTime, #moveTimeMobile').change(function() {
+        syncControl('moveTime', $(this).val());
+    });
+
+    $('#promotion, #promotionMobile').change(function() {
+        syncControl('promotion', $(this).val());
     });
 
     // New buttons for copying and printing moves
@@ -621,7 +649,7 @@ $(function() {
                 let move = game.move({
                     from: selectedSquare,
                     to: square,
-                    promotion: $("#promotion").val()
+                    promotion: controlVal('promotion')
                 });
                 if (move) {
                     moveList = moveList.slice(0, cursor);

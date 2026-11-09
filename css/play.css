@@ -1,4 +1,9 @@
 /* New align */
+html {
+    overflow-x: hidden;
+    max-width: 100%;
+}
+
 body {
     display: flex;
     align-items: center;
@@ -6,6 +11,8 @@ body {
     gap: 20px;
     padding: 20px;
     min-height: 100vh;
+    box-sizing: border-box;
+    max-width: 100%;
 }
 #board {
     touch-action: none;
@@ -221,98 +228,128 @@ body {
     background-color: #ffec64;
 }
 
-/* Mobile responsiveness - ONLY for actual mobile devices via JS detection */
-.mobile-layout {
-    body {
-        flex-direction: column;
-        padding: 0;
-        height: 100vh;
-        overflow: hidden;
-        align-items: center;
-        justify-content: flex-start;
-    }
+/* Mobile layout: class is on html and/or body */
+html.mobile-layout,
+body.mobile-layout {
+    overflow-x: hidden;
+    max-width: 100%;
+}
 
-    #board {
-        touch-action: none;
-        position: relative;
-        margin: 5px auto 3px auto;
-        display: block !important;
-        flex-shrink: 0;
-        flex-grow: 0;
-        align-self: center;
-        max-width: 100vw;
-        max-height: 55vh;
-    }
+body.mobile-layout,
+html.mobile-layout body {
+    flex-direction: column;
+    flex-wrap: nowrap;
+    padding: 8px 8px calc(80px + env(safe-area-inset-bottom, 0px));
+    height: 100dvh;
+    min-height: 100dvh;
+    overflow-x: hidden;
+    overflow-y: auto;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 8px;
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+}
 
-    #side {
-        width: auto !important;
-        max-width: 100% !important;
-        min-width: auto !important;
-        float: none !important;
-        margin: 0 !important;
-        padding: 3px;
-        max-height: 35vh;
-        overflow-y: auto;
-        flex-shrink: 0;
-        flex-grow: 0;
-        align-self: center;
-    }
+body.mobile-layout #board,
+html.mobile-layout #board {
+    touch-action: none;
+    position: relative;
+    margin: 0 auto;
+    display: block !important;
+    flex-shrink: 0;
+    flex-grow: 0;
+    align-self: center;
+    max-width: calc(100vw - 16px);
+    box-sizing: border-box;
+}
 
-    .desktop-only {
-        display: none !important;
-    }
+body.mobile-layout #side,
+html.mobile-layout #side {
+    width: min(100%, 420px) !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    float: none !important;
+    margin: 0 auto !important;
+    padding: 8px;
+    max-height: none;
+    overflow: visible;
+    flex-shrink: 0;
+    flex-grow: 0;
+    align-self: center;
+    box-sizing: border-box;
+}
 
-    .buttonpanel {
-        grid-template-columns: 1fr 1fr;
-        max-width: 100%;
-        gap: 3px;
-        width: 100%;
-        justify-content: center;
-    }
+body.mobile-layout .desktop-only,
+html.mobile-layout .desktop-only {
+    display: none !important;
+}
 
-    .buttonpanel .yellowButton {
-        width: 100%;
-        min-width: 0;
-        font-size: 10px;
-        padding: 4px 0;
-    }
+body.mobile-layout .buttonpanel,
+html.mobile-layout .buttonpanel {
+    grid-template-columns: 1fr 1fr;
+    max-width: 100%;
+    gap: 3px;
+    width: 100%;
+    justify-content: center;
+}
 
-    .yellowButton {
-        margin: 0;
-        font-size: 10px;
-        padding: 4px 0;
-    }
+body.mobile-layout .buttonpanel .yellowButton,
+html.mobile-layout .buttonpanel .yellowButton {
+    width: 100%;
+    min-width: 0;
+    font-size: 10px;
+    padding: 4px 0;
+}
 
-    #optionsBox {
-        width: 100%;
-        padding: 2px;
-    }
+body.mobile-layout .yellowButton,
+html.mobile-layout .yellowButton {
+    margin: 0;
+    font-size: 10px;
+    padding: 4px 0;
+}
 
-    #gaugebox {
-        width: 100%;
-        margin: 3px 0;
-    }
+body.mobile-layout #optionsBox,
+html.mobile-layout #optionsBox {
+    width: 100%;
+    padding: 2px;
+}
 
-    #gauge {
-        transform: scale(0.6);
-        margin: 0 auto;
-    }
+body.mobile-layout #gaugebox,
+html.mobile-layout #gaugebox {
+    width: 100%;
+    margin: 3px 0;
+}
 
-    #pgn {
-        width: 100% !important;
-        max-width: 100%;
-        box-sizing: border-box;
-        color: #ecf0f1;
-    }
+body.mobile-layout #gauge,
+html.mobile-layout #gauge {
+    transform: scale(0.6);
+    margin: 0 auto;
+}
 
-    #status {
-        font-size: 10px;
-        padding: 2px;
-    }
+body.mobile-layout #pgn,
+body.mobile-layout #pgnMobile,
+html.mobile-layout #pgn,
+html.mobile-layout #pgnMobile {
+    width: 100% !important;
+    max-width: 100%;
+    box-sizing: border-box;
+    color: #ecf0f1;
+}
+
+body.mobile-layout #status,
+html.mobile-layout #status {
+    font-size: 12px;
+    padding: 6px;
+    width: 100%;
+    box-sizing: border-box;
 }
 
 @media (max-width: 767px) {
   #gauge { display: none; }
+  .desktop-only { display: none !important; }
+  #side { display: none !important; }
 }
 
 #optionsBox label {
