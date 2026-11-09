@@ -274,6 +274,12 @@
                 CAMERA_DISTANCE * Math.cos(CAMERA_POLAR_ANGLE),
                 -CAMERA_DISTANCE * Math.sin(CAMERA_POLAR_ANGLE));
 
+            // Override camera positions if custom camera position is provided (must be done before prepareScene)
+            if (cfg.hasOwnProperty('cameraPosition') && cfg.cameraPosition) {
+                CAMERA_POSITION_WHITE.set(cfg.cameraPosition.x, cfg.cameraPosition.y, cfg.cameraPosition.z);
+                CAMERA_POSITION_BLACK.set(cfg.cameraPosition.x, cfg.cameraPosition.y, -cfg.cameraPosition.z);
+            }
+
             var whitePieceColor = 0xAAAAAA;
             if (cfg.hasOwnProperty('whitePieceColor') && typeof cfg.whitePieceColor === 'number') {
                 whitePieceColor = cfg.whitePieceColor;
@@ -604,9 +610,19 @@
                     CAMERA.position.set(CAMERA_POSITION_BLACK.x, CAMERA_POSITION_BLACK.y, CAMERA_POSITION_BLACK.z);
                 }
 
-                // First-person POV angle - gentle sitting perspective
-                CAMERA.position.set(0, 12, 15);
-                CAMERA.lookAt(new THREE.Vector3(0, 0, 0));
+                // Use custom camera position if provided in config
+                if (cfg.hasOwnProperty('cameraPosition') && cfg.cameraPosition) {
+                    CAMERA.position.set(cfg.cameraPosition.x, cfg.cameraPosition.y, cfg.cameraPosition.z);
+                    if (cfg.hasOwnProperty('cameraLookAt') && cfg.cameraLookAt) {
+                        CAMERA.lookAt(new THREE.Vector3(cfg.cameraLookAt.x, cfg.cameraLookAt.y, cfg.cameraLookAt.z));
+                    } else {
+                        CAMERA.lookAt(new THREE.Vector3(0, 0, 0));
+                    }
+                } else {
+                    // Default first-person POV angle - gentle sitting perspective
+                    CAMERA.position.set(0, 12, 15);
+                    CAMERA.lookAt(new THREE.Vector3(0, 0, 0));
+                }
 
                 SCENE.add(CAMERA);
 

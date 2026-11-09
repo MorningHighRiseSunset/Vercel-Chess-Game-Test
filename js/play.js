@@ -71,6 +71,8 @@ $(function() {
             ));
             desiredBoardWidth = Math.max(desiredBoardWidth, 200);
             if (board3D) {
+                // Make 3D board larger on mobile to avoid cutting off pieces
+                desiredBoardWidth = Math.floor(desiredBoardWidth * 1.2);
                 desiredBoardWidth &= 0xFFFC; // mod 4 = 0
                 boardDiv.css('width', desiredBoardWidth);
                 boardDiv.css('height', (desiredBoardWidth * 0.75));
@@ -303,6 +305,10 @@ $(function() {
             onMouseoverSquare: onMouseoverSquare,
             onSnapEnd: onSnapEnd
         };
+        // Disable rotate controls on mobile for flatter view
+        if (isMobile) {
+            cfg.rotateControls = false;
+        }
         if (board3D) {
             if (pieceSet) {
                 if (pieceSet === 'minions') {
@@ -315,9 +321,14 @@ $(function() {
             } else {
                 cfg.pieceSet = 'assets/chesspieces/classic/{piece}.json';
             }
-            // Set camera to top-down view
-            cfg.cameraPosition = { x: 0, y: 30, z: 0 };
-            cfg.cameraLookAt = { x: 0, y: 0, z: 0 };
+            // Set camera - slight angle for mobile, more angled for desktop
+            if (isMobile) {
+                cfg.cameraPosition = { x: 0, y: 18, z: 4 };
+                cfg.cameraLookAt = { x: 0, y: 0, z: 0 };
+            } else {
+                cfg.cameraPosition = { x: 0, y: 12, z: 15 };
+                cfg.cameraLookAt = { x: 0, y: 0, z: 0 };
+            }
             return new ChessBoard3('board', cfg);
         } else {
             return new ChessBoard('board', cfg);
