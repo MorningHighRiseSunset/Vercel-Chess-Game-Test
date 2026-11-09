@@ -5,13 +5,13 @@ body {
     justify-content: center;
     gap: 20px;
     padding: 20px;
-    height: 100vh;
+    min-height: 100vh;
 }
 #board {
     touch-action: none;
     position: relative;
     margin: 0;
-    display: inline-block;
+    display: block !important;
     border-radius: 4px;
     overflow: hidden;
     max-height: calc(100vh - 40px);
@@ -21,8 +21,8 @@ body {
 #side {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     padding: 15px;
-    width: 350px;
-    min-width: 350px;
+    width: 400px;
+    min-width: 400px;
     position: relative;
     margin: 0 auto;
     display: inline-block;
@@ -221,31 +221,43 @@ body {
     background-color: #ffec64;
 }
 
-/* Mobile responsiveness */
-@media screen and (max-width: 768px) {
-    #container {
-        display: flex;
+/* Mobile responsiveness - ONLY for actual mobile devices via JS detection */
+.mobile-layout {
+    body {
         flex-direction: column;
-        padding: 10px;
-        margin: 10px auto;
-        max-width: 100%;
+        padding: 0;
+        height: 100vh;
+        overflow: hidden;
+        align-items: center;
+        justify-content: flex-start;
     }
 
     #board {
-        touch-action: none; /* Prevent touch scrolling on the chessboard area */
+        touch-action: none;
         position: relative;
-        margin: 0 auto;
-        display: inline-block;
+        margin: 5px auto 3px auto;
+        display: block !important;
+        flex-shrink: 0;
+        flex-grow: 0;
+        align-self: center;
+        max-width: 100vw;
+        max-height: 55vh;
     }
 
     #side {
-        width: 100% !important;
+        width: auto !important;
+        max-width: 100% !important;
+        min-width: auto !important;
         float: none !important;
-        margin: 20px 0 !important;
-        padding: 15px;
+        margin: 0 !important;
+        padding: 3px;
+        max-height: 35vh;
+        overflow-y: auto;
+        flex-shrink: 0;
+        flex-grow: 0;
+        align-self: center;
     }
 
-    /* Hide desktop-only elements on mobile */
     .desktop-only {
         display: none !important;
     }
@@ -253,7 +265,7 @@ body {
     .buttonpanel {
         grid-template-columns: 1fr 1fr;
         max-width: 100%;
-        gap: 6px;
+        gap: 3px;
         width: 100%;
         justify-content: center;
     }
@@ -261,38 +273,41 @@ body {
     .buttonpanel .yellowButton {
         width: 100%;
         min-width: 0;
-        font-size: 12px;
-        padding: 7px 0;
+        font-size: 10px;
+        padding: 4px 0;
     }
 
     .yellowButton {
         margin: 0;
-        font-size: 12px;
-        padding: 7px 0;
+        font-size: 10px;
+        padding: 4px 0;
     }
 
     #optionsBox {
         width: 100%;
-        padding: 5px;
+        padding: 2px;
     }
 
     #gaugebox {
         width: 100%;
-        margin: 10px 0;
+        margin: 3px 0;
     }
 
-    /* Adjust gauge size for mobile */
     #gauge {
-        transform: scale(0.8);
+        transform: scale(0.6);
         margin: 0 auto;
     }
 
-    /* Make PGN box fit mobile width */
     #pgn {
         width: 100% !important;
         max-width: 100%;
         box-sizing: border-box;
         color: #ecf0f1;
+    }
+
+    #status {
+        font-size: 10px;
+        padding: 2px;
     }
 }
 

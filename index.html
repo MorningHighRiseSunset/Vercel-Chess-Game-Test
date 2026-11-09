@@ -21,8 +21,8 @@
         .burger-menu {
             display: none;
             position: fixed;
-            bottom: 30px;
-            left: 30px;
+            bottom: 20px;
+            left: 20px;
             z-index: 2000;
             background: #2c3e50;
             border: 1px solid #34495e;
@@ -141,6 +141,10 @@
                 display: block;
             }
         }
+
+        .mobile-layout .burger-menu {
+            display: block !important;
+        }
     </style>
 </head>
 <body>
@@ -160,10 +164,10 @@
     </button>
 
     <!-- Mobile Menu Overlay -->
-    <div class="mobile-menu-overlay" id="menuOverlay"></div>
+    <div class="mobile-menu-overlay" id="menuOverlay" style="display: none;"></div>
 
     <!-- Mobile Menu Content -->
-    <div class="mobile-menu-content" id="mobileMenu">
+    <div class="mobile-menu-content" id="mobileMenu" style="bottom: -100%; display: none;">
         <button class="close-menu" id="closeMenu">&times;</button>
 
         <h3>Game Controls</h3>
@@ -326,11 +330,13 @@
 
         function openMenu() {
             mobileMenu.classList.add('active');
+            mobileMenu.style.display = 'block';
             menuOverlay.style.display = 'block';
         }
 
         function closeMenuFunc() {
             mobileMenu.classList.remove('active');
+            mobileMenu.style.display = 'none';
             menuOverlay.style.display = 'none';
         }
 

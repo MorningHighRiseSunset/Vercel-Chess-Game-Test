@@ -14,21 +14,30 @@ $(function() {
         statusEl = $('#status');
 
     var engineRunning = false;
-    var board3D = true; // Force 3D mode for all users including mobile
+    var board3D = true; // Default to 3D on desktop
 
-    if (!ChessBoard3.webGLEnabled()) {
+    // Force 2D mode ONLY on actual mobile devices (check user agent)
+    var isMobile = /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+    if (isMobile) {
+        board3D = false; // Force 2D on mobile
+        console.log('Mobile device detected - forcing 2D mode');
+        $('body').addClass('mobile-layout'); // Add class for CSS targeting
+        $('.burger-menu').show(); // Ensure burger menu is visible
+    }
+
+    if (board3D && typeof ChessBoard3 !== 'undefined' && !ChessBoard3.webGLEnabled()) {
         swal("WebGL unsupported or disabled.", "Using a 2D board...");
         board3D = false;
         $('#dimensionBtn').remove();
     }
 
     function adjustBoardWidth() {
-        var fudge = 20;
+        var fudge = 10;
         var windowWidth = $(window).width();
         var windowHeight = $(window).height();
 
-        // For mobile devices
-        if (windowWidth < 768) {  // Standard mobile breakpoint
+        // For mobile devices ONLY (check user agent, not screen width)
+        if (isMobile) {
             var boardDiv = $('#board');
             // Make side panel stack below board on mobile
             $('#side').css({
@@ -36,8 +45,8 @@ $(function() {
                 'width': '100%',
                 'margin-top': '20px'
             });
-            // Make board take more width on mobile for better zoom
-            desiredBoardWidth = windowWidth - fudge;
+            // Make board responsive to screen size on mobile - use 85% of viewport to prevent cutoff
+            var desiredBoardWidth = Math.floor(windowWidth * 0.85);
             if (board3D) {
                 desiredBoardWidth &= 0xFFFC; // mod 4 = 0
                 boardDiv.css('width', desiredBoardWidth);
@@ -47,23 +56,30 @@ $(function() {
                 boardDiv.css('height', desiredBoardWidth);
             }
         } else {
-            // Desktop logic
-            var sideWidth = $('#side').outerWidth(true) || 350;
+            // Desktop logic - restore original side panel layout
+            $('#side').css({
+                'float': 'none',
+                'width': '400px',
+                'margin-top': '0'
+            });
+
+            var sideWidth = $('#side').outerWidth(true) || 400;
             var bodyPadding = 30;
-            var availableWidth = windowWidth - sideWidth - bodyPadding - fudge;
-            var availableHeight = windowHeight - bodyPadding - fudge;
+            var desktopFudge = 20;
+            var availableWidth = windowWidth - sideWidth - bodyPadding - desktopFudge;
+            var availableHeight = windowHeight - bodyPadding - desktopFudge;
 
             var boardDiv = $('#board');
 
             if (board3D) {
                 // 3D board - make it larger
-                desiredBoardWidth = Math.max(availableWidth, availableHeight) * 1.5;
+                desiredBoardWidth = Math.min(availableWidth, availableHeight) * 1.2;
                 desiredBoardWidth &= 0xFFFC; // mod 4 = 0
                 boardDiv.css('width', desiredBoardWidth);
                 boardDiv.css('height', desiredBoardWidth * 0.75);
             } else {
                 // 2D board - make it normal size
-                desiredBoardWidth = Math.min(availableWidth, availableHeight) * 0.8;
+                desiredBoardWidth = Math.min(availableWidth, availableHeight) * 0.95;
                 boardDiv.css('width', desiredBoardWidth);
                 boardDiv.css('height', desiredBoardWidth);
             }
@@ -291,6 +307,10 @@ $(function() {
 
     adjustBoardWidth();
     board = createBoard();
+    // Call adjustBoardWidth again after board creation to ensure proper sizing
+    setTimeout(function() {
+        adjustBoardWidth();
+    }, 100);
 
     $(window).resize(function() {
         adjustBoardWidth();
