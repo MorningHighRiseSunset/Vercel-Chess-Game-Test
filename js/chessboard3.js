@@ -660,6 +660,17 @@
                         }
                         CAMERA_CONTROLS.target.set(0, 0, 0);
                         CAMERA_CONTROLS.enabled = true;
+
+                        // If custom camera position was set, update OrbitControls to match
+                        if (cfg.hasOwnProperty('cameraPosition') && cfg.cameraPosition) {
+                            CAMERA.position.set(cfg.cameraPosition.x, cfg.cameraPosition.y, cfg.cameraPosition.z);
+                            CAMERA.lookAt(new THREE.Vector3(
+                                cfg.cameraLookAt ? cfg.cameraLookAt.x : 0,
+                                cfg.cameraLookAt ? cfg.cameraLookAt.y : 0,
+                                cfg.cameraLookAt ? cfg.cameraLookAt.z : 0
+                            ));
+                            CAMERA_CONTROLS.update();
+                        }
                     }
                 }
             }

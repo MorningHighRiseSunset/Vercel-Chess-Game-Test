@@ -19,9 +19,10 @@ $(function() {
     // Treat phones and narrow viewports as mobile
     var isMobileUA = /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
     var isMobile = isMobileUA || window.innerWidth <= 768;
+    console.log('isMobile:', isMobile, 'windowWidth:', window.innerWidth);
     if (isMobile) {
         board3D = false; // Force 2D on mobile
-        console.log('Mobile layout enabled');
+        console.log('Mobile layout enabled, forcing 2D board');
         $('html, body').addClass('mobile-layout');
     }
 
@@ -98,7 +99,7 @@ $(function() {
 
             if (board3D) {
                 // 3D board - make it larger
-                desiredBoardWidth = Math.min(availableWidth, availableHeight) * 1.2;
+                desiredBoardWidth = Math.min(availableWidth, availableHeight) * 5.5;
                 desiredBoardWidth &= 0xFFFC; // mod 4 = 0
                 boardDiv.css('width', desiredBoardWidth);
                 boardDiv.css('height', desiredBoardWidth * 0.75);
